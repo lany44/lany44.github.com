@@ -4,9 +4,9 @@
   
   <link href="/atom.xml" rel="self"/>
   
-  <link href="http://yoursite.com/"/>
-  <updated>2016-05-22T15:44:55.966Z</updated>
-  <id>http://yoursite.com/</id>
+  <link href="http://lany44.github.io/"/>
+  <updated>2016-05-23T16:08:22.972Z</updated>
+  <id>http://lany44.github.io/</id>
   
   <author>
     <name>lany44</name>
@@ -16,29 +16,61 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>Hello World</title>
-    <link href="http://yoursite.com/2016/05/22/hello-world/"/>
-    <id>http://yoursite.com/2016/05/22/hello-world/</id>
-    <published>2016-05-22T15:44:55.950Z</published>
-    <updated>2016-05-22T15:44:55.966Z</updated>
+    <title></title>
+    <link href="http://lany44.github.io/2016/05/24/test/"/>
+    <id>http://lany44.github.io/2016/05/24/test/</id>
+    <published>2016-05-23T16:08:22.965Z</published>
+    <updated>2016-05-23T16:08:22.972Z</updated>
     
-    <content type="html">&lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.io/docs/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;documentation&lt;/a&gt; for more info. If you get any problems when using Hexo, you can find the answer in &lt;a href=&quot;https://hexo.io/docs/troubleshooting.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;troubleshooting&lt;/a&gt; or you can ask me on &lt;a href=&quot;https://github.com/hexojs/hexo/issues&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;GitHub&lt;/a&gt;.&lt;/p&gt;
-&lt;h2 id=&quot;Quick-Start&quot;&gt;&lt;a href=&quot;#Quick-Start&quot; class=&quot;headerlink&quot; title=&quot;Quick Start&quot;&gt;&lt;/a&gt;Quick Start&lt;/h2&gt;&lt;h3 id=&quot;Create-a-new-post&quot;&gt;&lt;a href=&quot;#Create-a-new-post&quot; class=&quot;headerlink&quot; title=&quot;Create a new post&quot;&gt;&lt;/a&gt;Create a new post&lt;/h3&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;$ hexo new &lt;span class=&quot;string&quot;&gt;&quot;My New Post&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;p&gt;More info: &lt;a href=&quot;https://hexo.io/docs/writing.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Writing&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;Run-server&quot;&gt;&lt;a href=&quot;#Run-server&quot; class=&quot;headerlink&quot; title=&quot;Run server&quot;&gt;&lt;/a&gt;Run server&lt;/h3&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;$ hexo server&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;p&gt;More info: &lt;a href=&quot;https://hexo.io/docs/server.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Server&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;Generate-static-files&quot;&gt;&lt;a href=&quot;#Generate-static-files&quot; class=&quot;headerlink&quot; title=&quot;Generate static files&quot;&gt;&lt;/a&gt;Generate static files&lt;/h3&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;$ hexo generate&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;p&gt;More info: &lt;a href=&quot;https://hexo.io/docs/generating.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Generating&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;Deploy-to-remote-sites&quot;&gt;&lt;a href=&quot;#Deploy-to-remote-sites&quot; class=&quot;headerlink&quot; title=&quot;Deploy to remote sites&quot;&gt;&lt;/a&gt;Deploy to remote sites&lt;/h3&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;$ hexo deploy&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;p&gt;More info: &lt;a href=&quot;https://hexo.io/docs/deployment.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Deployment&lt;/a&gt;&lt;/p&gt;
+    <content type="html">&lt;p&gt;akfjdshbbbbbbbbbbbbbbbbbbbbbbbbbbbb&lt;/p&gt;
+&lt;p&gt;testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttestte&lt;/p&gt;
+&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
+&lt;p&gt;sttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest    test    test    test    testtest    test    test    test        test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    test    &lt;/p&gt;
 </content>
     
     <summary type="html">
     
-      &lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.
+      &lt;p&gt;akfjdshbbbbbbbbbbbbbbbbbbbbbbbbbbbb&lt;/p&gt;
+&lt;p&gt;testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttestte&lt;/p&gt;
     
     </summary>
     
+    
+  </entry>
+  
+  <entry>
+    <title>Hexo/github-pages建博</title>
+    <link href="http://lany44.github.io/2016/05/23/github-pages%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/"/>
+    <id>http://lany44.github.io/2016/05/23/github-pages搭建个人博客/</id>
+    <published>2016-05-22T16:00:00.000Z</published>
+    <updated>2016-05-23T14:22:02.770Z</updated>
+    
+    <content type="html">&lt;h2 id=&quot;Hexo-github-pages搭建个人博客&quot;&gt;&lt;a href=&quot;#Hexo-github-pages搭建个人博客&quot; class=&quot;headerlink&quot; title=&quot;Hexo/github-pages搭建个人博客&quot;&gt;&lt;/a&gt;Hexo/github-pages搭建个人博客&lt;/h2&gt;&lt;h3 id=&quot;测试用1&quot;&gt;&lt;a href=&quot;#测试用1&quot; class=&quot;headerlink&quot; title=&quot;测试用1&quot;&gt;&lt;/a&gt;测试用1&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;阿萨德&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;11111111111&lt;/li&gt;
+&lt;li&gt;2.22222222222&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;阿萨德&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;fff&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;​&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;222222222222222&quot;&gt;&lt;a href=&quot;#222222222222222&quot; class=&quot;headerlink&quot; title=&quot;222222222222222&quot;&gt;&lt;/a&gt;222222222222222&lt;/h3&gt;</content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;Hexo-github-pages搭建个人博客&quot;&gt;&lt;a href=&quot;#Hexo-github-pages搭建个人博客&quot; class=&quot;headerlink&quot; title=&quot;Hexo/github-pages搭建个人博客&quot;&gt;&lt;/a&gt;Hexo/github-pages
+    
+    </summary>
+    
+      <category term="技术日记" scheme="http://lany44.github.io/categories/%E6%8A%80%E6%9C%AF%E6%97%A5%E8%AE%B0/"/>
+    
+    
+      <category term="建立博客" scheme="http://lany44.github.io/tags/%E5%BB%BA%E7%AB%8B%E5%8D%9A%E5%AE%A2/"/>
     
   </entry>
   
