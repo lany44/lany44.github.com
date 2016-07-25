@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="建立博客," />
+  <meta name="keywords" content="Vue," />
 
 
 
@@ -86,58 +86,18 @@
 
 
 
-<meta name="description" content="Hexo/github-pages搭建个人博客测试用1
-阿萨德
-
-11111111111
-2.22222222222
-
-
-阿萨德
-
-fff
-
-​
-
-
-222222222222222">
+<meta name="description" content="Architecture大约一周前喻导从掘金vue版块看到一个vue实现知乎日报的项目，然后顺手又一次向我使出大安利术。终于在他煽动下，我大概看了下前辈项目的源码（我去，我竟然能看懂），之后一边看文档一边自己也试着实现了出来。因为之前一直在学习React生态圈相关，对component，container，state，生命周期等概念有了理解，加上vue本身的易用原则，文档又写的详细易懂。所以总体下">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hexo/github-pages建博">
-<meta property="og:url" content="http://lany44.github.io/2016/05/23/github-pages搭建个人博客/index.html">
+<meta property="og:title" content="项目总结——vue+vue-router实现知乎日报">
+<meta property="og:url" content="http://lany44.github.io/2016/07/24/vue+vue-router实现的知乎日报/index.html">
 <meta property="og:site_name" content="lany44">
-<meta property="og:description" content="Hexo/github-pages搭建个人博客测试用1
-阿萨德
-
-11111111111
-2.22222222222
-
-
-阿萨德
-
-fff
-
-​
-
-
-222222222222222">
-<meta property="og:updated_time" content="2016-05-23T14:22:02.770Z">
+<meta property="og:description" content="Architecture大约一周前喻导从掘金vue版块看到一个vue实现知乎日报的项目，然后顺手又一次向我使出大安利术。终于在他煽动下，我大概看了下前辈项目的源码（我去，我竟然能看懂），之后一边看文档一边自己也试着实现了出来。因为之前一直在学习React生态圈相关，对component，container，state，生命周期等概念有了理解，加上vue本身的易用原则，文档又写的详细易懂。所以总体下">
+<meta property="og:image" content="http://lany44.github.io/./zhihu.gif">
+<meta property="og:updated_time" content="2016-07-25T06:59:00.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo/github-pages建博">
-<meta name="twitter:description" content="Hexo/github-pages搭建个人博客测试用1
-阿萨德
-
-11111111111
-2.22222222222
-
-
-阿萨德
-
-fff
-
-​
-
-
-222222222222222">
+<meta name="twitter:title" content="项目总结——vue+vue-router实现知乎日报">
+<meta name="twitter:description" content="Architecture大约一周前喻导从掘金vue版块看到一个vue实现知乎日报的项目，然后顺手又一次向我使出大安利术。终于在他煽动下，我大概看了下前辈项目的源码（我去，我竟然能看懂），之后一边看文档一边自己也试着实现了出来。因为之前一直在学习React生态圈相关，对component，container，state，生命周期等概念有了理解，加上vue本身的易用原则，文档又写的详细易懂。所以总体下">
+<meta name="twitter:image" content="http://lany44.github.io/./zhihu.gif">
 
 
 
@@ -155,7 +115,7 @@ fff
   };
 </script>
 
-  <title> Hexo/github-pages建博 | lany44 </title>
+  <title> 项目总结——vue+vue-router实现知乎日报 | lany44 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -328,7 +288,7 @@ fff
             
             
               
-                Hexo/github-pages建博
+                项目总结——vue+vue-router实现知乎日报
               
             
           </h1>
@@ -340,8 +300,8 @@ fff
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-05-23T00:00:00+08:00" content="2016-05-23">
-              2016-05-23
+            <time itemprop="dateCreated" datetime="2016-07-24T00:00:00+08:00" content="2016-07-24">
+              2016-07-24
             </time>
           </span>
 
@@ -354,8 +314,8 @@ fff
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/技术日记/" itemprop="url" rel="index">
-                    <span itemprop="name">技术日记</span>
+                  <a href="/categories/项目总结/" itemprop="url" rel="index">
+                    <span itemprop="name">项目总结</span>
                   </a>
                 </span>
 
@@ -370,8 +330,8 @@ fff
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/05/23/github-pages搭建个人博客/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/23/github-pages搭建个人博客/" itemprop="commentsCount"></span>
+                <a href="/2016/07/24/vue+vue-router实现的知乎日报/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/24/vue+vue-router实现的知乎日报/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -394,21 +354,62 @@ fff
       
 
       
-        <h2 id="Hexo-github-pages搭建个人博客"><a href="#Hexo-github-pages搭建个人博客" class="headerlink" title="Hexo/github-pages搭建个人博客"></a>Hexo/github-pages搭建个人博客</h2><h3 id="测试用1"><a href="#测试用1" class="headerlink" title="测试用1"></a>测试用1</h3><ul>
-<li><p>阿萨德</p>
+        <h2 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h2><p>大约一周前喻导从掘金vue版块看到一个vue实现知乎日报的项目，然后顺手又一次向我使出大安利术。终于在他煽动下，我大概看了下前辈项目的源码（我去，我竟然能看懂），之后一边看文档一边自己也试着实现了出来。因为之前一直在学习React生态圈相关，对component，container，state，生命周期等概念有了理解，加上vue本身的易用原则，文档又写的详细易懂。所以总体下来自己在一边感叹vue API优美的同时，也写的很爽。</p>
+<a id="more"></a>
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><blockquote>
+<p><em>跨域问题没能很好的解决所以没能提供在线版本</em>     orz</p>
+</blockquote>
+<p><a href="https://github.com/lany44/zhihu-daliy-vue" target="_blank" rel="external">项目源码</a></p>
+<p><img src="./zhihu.gif" alt=""></p>
+<p>项目历时一周，因为暑假自己留校研习，基本没有受到干扰，除了吃饭睡觉都在码代码。</p>
+<p>开发环境也从windows过度到了OS X。          ——<em>来自家里的应援 (ง •_•)ง</em>  </p>
+<h2 id="Architecture-1"><a href="#Architecture-1" class="headerlink" title="Architecture"></a>Architecture</h2><ul>
+<li>JavaScript: Vue + Vue-Router + Swiper + Fastclick</li>
+<li>Css: Sass + PostCSS</li>
+<li>build: Npm + Vue-cli  [Webpack]</li>
+</ul>
+<h2 id="Vue-Vue-Router-Abstract"><a href="#Vue-Vue-Router-Abstract" class="headerlink" title="Vue + Vue-Router Abstract"></a>Vue + Vue-Router Abstract</h2><p>这里简单介绍vue + vue-router ，可以跳过。</p>
+<h3 id="Vue"><a href="#Vue" class="headerlink" title="Vue"></a>Vue</h3><p>Vue是种“轻 巧”的<a href="http://www.ruanyifeng.com/blog/2015/02/mvcmvp_mvvm.html" target="_blank" rel="external">MVVM</a>前端框架，<em>(目前官网的版本是1.0.x)</em>  其中ViewModel层由vue提供。在vue中我们通过v-xx=”a”来实现数据绑定，也可以使用常见的花括号模板插值，或是在表单元素上使用v-model双向绑定。</p>
+<p>Vue组件可以理解为预先定义好了行为的ViewModel类。一个组件内可以预定义很多选项，<a href="http://cn.vuejs.org/api/#选项-数据" target="_blank" rel="external">官方文档</a>中有详细的列举，除了基本的template，props，data，methods外，还有组件生命周期不同阶段调用的hook函数，自定义事件events等选项可以配置。</p>
+<p><a href="http://cn.vuejs.org/guide/components.html#父子组件通信" target="_blank" rel="external">组件间通信</a>也是非常重要的一环，父－&gt;子可以通过props传值，或配置ref来拿到子组件。或者自定义events后，父组件里v-on绑定事件给子组件，子组件调用$despatch()触发相应事件。由于绑定和触发的代码是分散在各个组件中，所以当组件间的通信复杂起来时，你需要<a href="http://vuex.vuejs.org/zh-cn/intro.html" target="_blank" rel="external">vuex</a>将容器中的状态存储在顶层中来进行管理分发。</p>
+<p>那么，如何利用它进行组件化开发呢？Webpack + 官方提供的vue-loader 直接搞 <strong>*.vue</strong>来书写Vue组件，通过vue-devtools调试。另外安装对应的Webpack loader后template里还支持方言呢。    <em>个人感觉模版语法之与React的jsx语法还是模版写起来更明确些。</em></p>
+<p>同时官方提供了Vue-cli这简单粗暴的东西帮你构建项目模版。        <em>搞起来就是贼快。</em></p>
+<p>此外还有，<a href="http://jiongks.name/blog/announcing-vue-2/" target="_blank" rel="external">令人期待的Vue 2.0</a>。</p>
+<h3 id="Vue-Router"><a href="#Vue-Router" class="headerlink" title="Vue-Router"></a>Vue-Router</h3><p><a href="http://router.vuejs.org/zh-cn/index.html" target="_blank" rel="external">Vue-Router</a>是Vue官方提供的路由器。用来帮助Vue项目构筑路由系统。使用router.map()配置app中的路径后，除了使用实例方法外进行切换外，使用在组件上配置v-link=””进行跳转。vue-router将路由跳转的过程细分，用户可以通过配置容器组件中route项调用跳转过程中不同阶段的hook函数，以此来在切换过程中做其他事情，比如请求数据，调用methods什么的。</p>
+<h2 id="Views"><a href="#Views" class="headerlink" title="Views"></a>Views</h2><p>项目包含以下页面：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">router.map(&#123;</div><div class="line">  <span class="string">'/'</span>: &#123;</div><div class="line">    component: list,</div><div class="line">    subRoutes: &#123;</div><div class="line">      <span class="string">'/'</span>: &#123;<span class="comment">//初始的list页</span></div><div class="line">        component: mainDefault</div><div class="line">      &#125;,</div><div class="line">      <span class="string">'/theme/:id'</span>: &#123;<span class="comment">//侧边sidebar进入的主题详情页</span></div><div class="line">        name: <span class="string">'theme'</span>,</div><div class="line">        component: mainTheme</div><div class="line">      &#125;,</div><div class="line">    &#125;</div><div class="line">  &#125;,</div><div class="line">  <span class="string">'/detail/:id'</span>: &#123;<span class="comment">//内容详情页</span></div><div class="line">    name: <span class="string">'detail'</span>,</div><div class="line">    component: detail</div><div class="line">  &#125;,</div><div class="line">  <span class="string">'/comments'</span>: &#123;<span class="comment">//评论详情页</span></div><div class="line">    component: comments</div><div class="line">  &#125;,</div><div class="line">  <span class="string">'/recommenders'</span>: &#123;<span class="comment">//内容推荐者页</span></div><div class="line">    component: recommenders</div><div class="line">  &#125;,</div><div class="line">  <span class="string">'/section'</span>: &#123;<span class="comment">//内容所属栏目汇总页</span></div><div class="line">    component: section</div><div class="line">  &#125;,</div><div class="line">  <span class="string">'/lany44'</span>: &#123;<span class="comment">//个人简介，用来顺便求职前端实习。却没能提供在线版 orz</span></div><div class="line">    component: lany44</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>部分实现：</p>
 <ul>
-<li>11111111111</li>
-<li>2.22222222222</li>
+<li>初始列表的动态加载以及列表重定位到上次浏览的地方。这部分代码写在main-default和detail组件中。通过路由系统的钩子函数，在激活阶段调用data()函数向windows绑定添加列表和修改顶部日期的事件，并判断当前url的name。将当前的scrollTop存在sessionStorage中，在detail的跳转中重定位列表的scrollTop。</li>
 </ul>
-</li>
-<li><p>阿萨德</p>
 <ul>
-<li>fff</li>
+<li>GET请求部分没有使用Vue-Resource而使用了<a href="https://github.com/camsong/blog/issues/2?hmsr=toutiao.io&amp;utm_medium=toutiao.io&amp;utm_source=toutiao.io" target="_blank" rel="external">fetch()</a>，开始是听说它可以帮我解决跨域的问题，<a href="https://fetch.spec.whatwg.org/#http-cors-protocol" target="_blank" rel="external">英文的文档</a>看不太懂，似懂非懂的用了起来，结果自然是失败了。不知道是不是header配置写的不对。最后开发阶段用chrome插件Allow-Control-Allow-Origin拿到了数据。        <em>orz</em></li>
+<li>主页侧滑列表的show hide由于多个地方可以控制，我将方法写在了util里一一绑定了事件。当这样的情况变多时就会越发难以控制，这时候就需要vuex了。</li>
 </ul>
-<p>​</p>
-</li>
+<h2 id="Components"><a href="#Components" class="headerlink" title="Components"></a>Components</h2><p>项目功能趋于展示，全局只写了一个events…大部分参数用props传下去就可以了。     <em>很简单啊</em></p>
+<p>简单介绍下组件们</p>
+<ul>
+<li>comments-comp——-单个评论     </li>
+<li>detail-content———–内容主体</li>
+<li>detail-header————头部一号</li>
+<li>list-comp——————首页列表里的单个项</li>
+<li>list-header—————-头部二号</li>
+<li>main-default————-初始列表页，import了slider和list-comp</li>
+<li>main-theme————–主题内容主体，import了list-comp</li>
+<li>sidebar———————侧滑列表。<em>手动斜眼I，偷懒没写滑动事件。</em></li>
+<li>slider————————初始页的轮播。<em>手动斜眼II，Swiper写的。</em></li>
 </ul>
-<h3 id="222222222222222"><a href="#222222222222222" class="headerlink" title="222222222222222"></a>222222222222222</h3>
+<p>部分实现与问题：</p>
+<ul>
+<li>第一次以组建化思想写的完整项目，一开始就知道怼头部……      <em>(hahahh</em></li>
+</ul>
+<ul>
+<li>list-comp实现了复用，其实每次有新的需求时，都是返回去稍微改改。组件化滴好啊。</li>
+</ul>
+<h2 id="Finally"><a href="#Finally" class="headerlink" title="Finally"></a>Finally</h2><p>感谢喻导，接触前端一年了都是一个人在闷头苦学，走了不不知道多少弯路。后来认识喻导，几次交流都一直鼓励我动手去做，东西先用起来。现在我越来越自信了，前端之路也会走的更加坚定。最后祝愿你的教育事业能一帆风顺。</p>
+<p>感谢yatessss，项目里给了我不小的帮助。超nice的前辈。</p>
+<p>最后要来一剂安利，Vue非常容易上手，API优美，文档好读，外加Vue-cli，vue-devtools套餐。你不来一套吗。<em>(我这样的弱者都能很快用起来，你萌还等啥呢)</em></p>
+
       
     </div>
 
@@ -429,25 +430,11 @@ fff
       
         <div class="post-tags">
           
-            <a href="/tags/建立博客/" rel="tag">#建立博客</a>
+            <a href="/tags/Vue/" rel="tag">#Vue</a>
           
         </div>
       
 
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-          </div>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/05/24/test/" rel="prev" title="">
-                 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
       
 
       
@@ -496,8 +483,8 @@ fff
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/05/23/github-pages搭建个人博客/"
-           data-title="Hexo/github-pages建博" data-url="http://lany44.github.io/2016/05/23/github-pages搭建个人博客/">
+      <div class="ds-thread" data-thread-key="2016/07/24/vue+vue-router实现的知乎日报/"
+           data-title="项目总结——vue+vue-router实现知乎日报" data-url="http://lany44.github.io/2016/07/24/vue+vue-router实现的知乎日报/">
       </div>
     
   </div>
@@ -542,7 +529,7 @@ fff
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">2</span>
+              <span class="site-state-item-count">1</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -624,7 +611,7 @@ fff
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Hexo-github-pages搭建个人博客"><span class="nav-number">1.</span> <span class="nav-text">Hexo/github-pages搭建个人博客</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#测试用1"><span class="nav-number">1.1.</span> <span class="nav-text">测试用1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#222222222222222"><span class="nav-number">1.2.</span> <span class="nav-text">222222222222222</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Architecture"><span class="nav-number">1.</span> <span class="nav-text">Architecture</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Introduction"><span class="nav-number">2.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Architecture-1"><span class="nav-number">3.</span> <span class="nav-text">Architecture</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Vue-Vue-Router-Abstract"><span class="nav-number">4.</span> <span class="nav-text">Vue + Vue-Router Abstract</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Vue"><span class="nav-number">4.1.</span> <span class="nav-text">Vue</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Vue-Router"><span class="nav-number">4.2.</span> <span class="nav-text">Vue-Router</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Views"><span class="nav-number">5.</span> <span class="nav-text">Views</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Components"><span class="nav-number">6.</span> <span class="nav-text">Components</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Finally"><span class="nav-number">7.</span> <span class="nav-text">Finally</span></a></li></ol></div>
             
           </div>
         </section>
