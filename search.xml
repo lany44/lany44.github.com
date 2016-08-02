@@ -4,41 +4,166 @@
   
     
     <entry>
+      <title><![CDATA[AJAX请求跨域问题总结]]></title>
+      <url>http://lany44.github.io/2016/07/31/%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/</url>
+      <content type="html"><![CDATA[<p>之前web知乎项目需要从知乎服务器上请求数据，遇到了请求跨域的问题。我将了解到的解决方案做下总结。</p>
+<a id="more"></a>
+<h2 id="同源政策"><a href="#同源政策" class="headerlink" title="同源政策"></a>同源政策</h2><p>为了保证用户信息的安全，防止恶意的网站窃取数据。1995年Netscape公司将同源政策<a href="https://en.wikipedia.org/wiki/Same-origin_policy" target="_blank" rel="external">（same-origin policy）</a>引入浏览器，同源政策成为了浏览器最核心也最基本的安全功能。</p>
+<p>若2个网页的协议，域名，端口中三者中任何一个不同，那么就会受到 “同源政策” 的限制。具体表现为：</p>
+<ol>
+<li>Cookie、LocalStorage 和 IndexDB 无法读取。</li>
+<li>DOM 无法获得。</li>
+<li>AJAX 请求不能发送。</li>
+</ol>
+<p>举个例子：</p>
+<p>下表给出了相对<a href="http://store.company.com/dir/page.html同源检测的示例" target="_blank" rel="external">http://store.company.com/dir/page.html同源检测的示例</a>:</p>
+<table>
+<thead>
+<tr>
+<th>URL</th>
+<th>结果</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>http://store.company.com/dir2/other.html</code></td>
+<td>成功</td>
+<td></td>
+</tr>
+<tr>
+<td><code>http://store.company.com/dir/inner/another.html</code></td>
+<td>成功</td>
+<td></td>
+</tr>
+<tr>
+<td><code>https://store.company.com/secure.html</code></td>
+<td>失败</td>
+<td>协议不同</td>
+</tr>
+<tr>
+<td><code>http://store.company.com:81/dir/etc.html</code></td>
+<td>失败</td>
+<td>端口不同</td>
+</tr>
+<tr>
+<td><code>http://news.company.com/dir/other.html</code></td>
+<td>失败</td>
+<td>主机名不同</td>
+</tr>
+</tbody>
+</table>
+<p>同源策略提升了Web前端的安全性，但牺牲了Web拓展上的灵活性。设想若把html、js、css、flash，image等文件全部布置在一台服务器上，小网站这样凑活还行，大中网站如果这样做服务器根本受不了的，可用性都不能保证的话，安全性就无从谈起。</p>
+<p>同源政策规定下，AJAX请求只能发给同源的网址，否则就报错。</p>
+<p>有以下几种方法避开这个限制。</p>
+<h2 id="JSONP"><a href="#JSONP" class="headerlink" title="JSONP"></a>JSONP</h2><p>JSONP是服务器与客户端跨源通信的常用方法。最大特点就是简单适用，老式浏览器全部支持，服务器改造非常小。</p>
+<p>它的基本思想是，网页通过添加一个script元素，向服务器请求JSON数据，这种做法不受同源政策限制；服务器收到请求后，将数据放在前端预先指定名字的回调函数里传回来引发执行。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">addScriptTaget</span>(<span class="params">address</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> script = ducument.creatElement(<span class="string">'script'</span>)</div><div class="line">  script.setAttribute(<span class="string">'type'</span>, <span class="string">'text/javascript'</span>)</div><div class="line">  script.src = address</div><div class="line">  <span class="built_in">document</span>.body.appendChild(script)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="built_in">window</span>.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  addScriptTaget(<span class="string">'http://example.com/xxxxx?callback=getData'</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getData</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">  <span class="comment">//todo...</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>服务器器端返回</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">getData(&#123;</div><div class="line">	<span class="string">"xxxxx"</span>: <span class="string">"a@＃¥％……&amp;＊"</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>由于<code>&lt;script&gt;</code>元素请求的脚本，直接作为代码运行。</p>
+<h2 id="WebSocket"><a href="#WebSocket" class="headerlink" title="WebSocket"></a>WebSocket</h2><p>WebSocket是一种通信协议，使用<code>ws://</code>（非加密）和<code>wss://</code>（加密）作为协议前缀。该协议不实行同源政策，只要服务器支持，就可以通过它进行跨源通信。</p>
+<p>下面是一个例子，浏览器发出的WebSocket请求的头信息。</p>
+<blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&gt; GET /chat HTTP/<span class="number">1.1</span></div><div class="line">&gt; Host: server.example.com</div><div class="line">&gt; Upgrade: websocket</div><div class="line">&gt; Connection: Upgrade</div><div class="line">&gt; Sec-WebSocket-Key: x3JJHMbDL1EzLkh9GBhXDw==</div><div class="line">&gt; Sec-WebSocket-Protocol: chat, superchat</div><div class="line">&gt; Sec-WebSocket-Version: <span class="number">13</span></div><div class="line">&gt; Origin: http:<span class="comment">//example.com</span></div><div class="line">&gt;</div></pre></td></tr></table></figure>
+</blockquote>
+<p>上面代码中，有一个字段是<code>Origin</code>，表示该请求的请求源（origin），即发自哪个域名。</p>
+<p>正是因为有了<code>Origin</code>这个字段，所以WebSocket才没有实行同源政策。因为服务器可以根据这个字段，判断是否许可本次通信。如果该域名在白名单内，服务器就会做出如下回应。</p>
+<blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&gt; HTTP/<span class="number">1.1</span> <span class="number">101</span> Switching Protocols</div><div class="line">&gt; Upgrade: websocket</div><div class="line">&gt; Connection: Upgrade</div><div class="line">&gt; Sec-WebSocket-Accept: HSmrc0sMlYUkAGmm5OPpG2HaGWk=</div><div class="line">&gt; Sec-WebSocket-Protocol: chat</div><div class="line">&gt;</div></pre></td></tr></table></figure>
+</blockquote>
+<p>实现了websocket的浏览器：</p>
+<table>
+<thead>
+<tr>
+<th>Chrome</th>
+<th>Supported in version 4+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Firefox</td>
+<td>Supported in version 4+</td>
+</tr>
+<tr>
+<td>Internet Explorer</td>
+<td>Supported in version 10+</td>
+</tr>
+<tr>
+<td>Opera</td>
+<td>Supported in version 10+</td>
+</tr>
+<tr>
+<td>Safari</td>
+<td>Supported in version 5+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="CORS"><a href="#CORS" class="headerlink" title="CORS"></a>CORS</h2><p>Cross-Origin Resource Sharing (CORS) 是W3C标准，它定义了在跨域访问资源时浏览器和服务器之间如何通信。CORS背后的基本思想是使用自定义的HTTP头部允许浏览器和服务器相互了解对方，从而决定请求或响应成功与否。<br>CORS与JSONP相比，更为先进、方便和可靠。</p>
+<ol>
+<li>JSONP只能实现GET请求，而CORS支持所有类型的HTTP请求。</li>
+<li>使用CORS，开发者可以使用普通的XMLHttpRequest发起请求和获得数据，比起JSONP有更好的错误处理</li>
+<li>JSONP主要被老的浏览器支持，它们往往不支持CORS，而绝大多数现代浏览器都已经支持了CORS。</li>
+</ol>
+<p>对一个简单的请求，没有自定义头部，要么使用GET，要么使用POST，它的主体是text/plain,请求用一个名叫Orgin的额外的头部发送。Origin头部包含请求页面的头部（协议，域名，端口），这样服务器可以很容易的决定它是否应该提供响应。<br>服务器端对于CORS的支持，主要就是通过设置Access-Control-Allow-Origin来进行的。<br>Access-Control-Allow-Origin：*   表示允许任何域的请求<br>为了防止XSS攻击我们的服务器， 我们可以限制域，比如<br>Access-Control-Allow-Origin: “允许域的url”</p>
+<p>后文中的反向代理就是用了这个。</p>
+<p>除了Access-Control-Allow-Origin外还有很多参数可以配置。</p>
+<p>更多详情见  <a href="http://www.ruanyifeng.com/blog/2016/04/cors.html" target="_blank" rel="external">阮一峰－跨域资源共享 CORS 详解</a>。</p>
+<hr>
+<p>以上三种情况都需要前后端配合，各自的使用场景不同，也各有利弊。</p>
+<p>那么像我那样向知乎日报请求数据的，以上方法显然都不适用，那么。</p>
+<h2 id="一个chrome插件"><a href="#一个chrome插件" class="headerlink" title="一个chrome插件"></a>一个chrome插件</h2><p>chrome应用商店搜索－Allow-Control-Allow-Origin</p>
+<p>官方描述：Allows to you request any site with ajax from any source. Adds to response ‘Allow-Control-Allow-Origin: *’ header</p>
+<p>本地开发调试时使用的就是他。再次感谢yatessss前辈，非常方便。</p>
+<h2 id="反向代理转发"><a href="#反向代理转发" class="headerlink" title="反向代理转发"></a>反向代理转发</h2><p>这种解决办法的思想为：架设服务器代理。浏览器请求同源服务器，再由后者请求外部服务。</p>
+<p>这里主要介绍利用nginx做代理服务器。</p>
+<p>mac下修改配置文件：/usr/local/etc/nginx/nginx.conf </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">server &#123;</div><div class="line">    listen       <span class="number">8000</span>;</div><div class="line">    server_name  api.a.com;</div><div class="line">    location /data/&#123;</div><div class="line">        proxy_pass http:<span class="comment">//b.com/;</span></div><div class="line">        add_header Content-Type <span class="string">"text/plain;charset=utf-8"</span>;</div><div class="line">        add_header <span class="string">'Access-Control-Allow-Origin'</span> <span class="string">'a.com'</span>;   </div><div class="line">        add_header <span class="string">'Access-Control-Allow-Credentials'</span> <span class="string">'true'</span>; </div><div class="line">        add_header <span class="string">'Access-Control-Allow-Methods'</span> <span class="string">'GET'</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>a.com下去往api.a.com/data/下的请求都会转发到b.com/。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>若是能操作到后端，那么JSONP，CORS都不是难事，否则还是乖乖搭个服务器做代理转发。或者像我那个项目一样，利用chrome插件暂时解决一下。</p>
+<h2 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h2><blockquote>
+<p>[1] 阮一峰. <a href="http://www.ruanyifeng.com/blog/2016/04/same-origin-policy.html" target="_blank" rel="external">浏览器同源政策及其规避方法</a>[CP/OL].</p>
+</blockquote>
+]]></content>
+    </entry>
+    
+    <entry>
       <title><![CDATA[项目总结——vue+vue-router实现知乎日报]]></title>
       <url>http://lany44.github.io/2016/07/24/vue+vue-router%E5%AE%9E%E7%8E%B0%E7%9A%84%E7%9F%A5%E4%B9%8E%E6%97%A5%E6%8A%A5/</url>
-      <content type="html"><![CDATA[<h2 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h2><p>大约一周前喻导从掘金vue版块看到一个vue实现知乎日报的项目，然后顺手又一次向我使出大安利术。终于在他煽动下，我大概看了下前辈项目的源码（我去，我竟然能看懂），之后一边看文档一边自己也试着实现了出来。因为之前一直在学习React生态圈相关，对component，container，state，生命周期等概念有了理解，加上vue本身的易用原则，文档又写的详细易懂。所以总体下来自己在一边感叹vue API优美的同时，也写的很爽。</p>
+      <content type="html"><![CDATA[<h2 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h2><p>大约一周前喻导从掘金vue版块看到一个vue实现知乎日报的项目，然后顺手又一次向我使出大安利术。终于在他煽动下，我大概看了下前辈项目的源码（我去，我竟然能看懂），之后一边看文档一边自己也试着实现了出来。因为之前一直在学习React生态圈相关，对component，container，state，生命周期等概念有了理解，加上vue本身的易用原则，文档又写的详细易懂。所以总体下来自己在一边感叹vue API优美的同时（<em>跟风</em>），也写的很爽。</p>
 <a id="more"></a>
 <h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><blockquote>
-<p><em>跨域问题没能很好的解决所以没能提供在线版本</em>     orz</p>
+<p><em>知乎接口跨域限制所以没能提供在线版本</em>     orz</p>
 </blockquote>
 <p><a href="https://github.com/lany44/zhihu-daliy-vue" target="_blank" rel="external">项目源码</a></p>
 <p><img src="./zhihu.gif" alt=""></p>
-<p>项目历时一周，因为暑假自己留校研习，基本没有受到干扰，除了吃饭睡觉都在码代码。</p>
-<p>开发环境也从windows过度到了OS X。          ——<em>来自家里的应援 (ง •_•)ง</em>  </p>
+<p>项目历时一周，因为暑假自己留校学习，基本没有受到干扰，除了吃饭睡觉都在码代码。</p>
+<p>开发环境也从windows过度到了mac平台。          ——<em>家里的应援 (ง •_•)ง</em>  </p>
 <h2 id="Architecture-1"><a href="#Architecture-1" class="headerlink" title="Architecture"></a>Architecture</h2><ul>
 <li>JavaScript: Vue + Vue-Router + Swiper + Fastclick</li>
 <li>Css: Sass + PostCSS</li>
 <li>build: Npm + Vue-cli  [Webpack]</li>
 </ul>
 <h2 id="Vue-Vue-Router-Abstract"><a href="#Vue-Vue-Router-Abstract" class="headerlink" title="Vue + Vue-Router Abstract"></a>Vue + Vue-Router Abstract</h2><p>这里简单介绍vue + vue-router ，可以跳过。</p>
-<h3 id="Vue"><a href="#Vue" class="headerlink" title="Vue"></a>Vue</h3><p>Vue是种“轻 巧”的<a href="http://www.ruanyifeng.com/blog/2015/02/mvcmvp_mvvm.html" target="_blank" rel="external">MVVM</a>前端框架，<em>(目前官网的版本是1.0.x)</em>  其中ViewModel层由vue提供。在vue中我们通过v-xx=”a”来实现数据绑定，也可以使用常见的花括号模板插值，或是在表单元素上使用v-model双向绑定。</p>
+<h3 id="Vue"><a href="#Vue" class="headerlink" title="Vue"></a>Vue</h3><p>Vue是种“轻 巧”的<a href="http://www.ruanyifeng.com/blog/2015/02/mvcmvp_mvvm.html" target="_blank" rel="external">MVVM</a>前端框架，<em>(目前官网的版本是1.0.x)</em>  其中ViewModel层由vue提供。在vue中我们通过具有特殊前缀的HTML 属性来实现数据绑定，也可以使用常见的花括号模板插值，或是在表单元素上使用v-model双向绑定。</p>
 <p>Vue组件可以理解为预先定义好了行为的ViewModel类。一个组件内可以预定义很多选项，<a href="http://cn.vuejs.org/api/#选项-数据" target="_blank" rel="external">官方文档</a>中有详细的列举，除了基本的template，props，data，methods外，还有组件生命周期不同阶段调用的hook函数，自定义事件events等选项可以配置。</p>
 <p><a href="http://cn.vuejs.org/guide/components.html#父子组件通信" target="_blank" rel="external">组件间通信</a>也是非常重要的一环，父－&gt;子可以通过props传值，或配置ref来拿到子组件。或者自定义events后，父组件里v-on绑定事件给子组件，子组件调用$despatch()触发相应事件。由于绑定和触发的代码是分散在各个组件中，所以当组件间的通信复杂起来时，你需要<a href="http://vuex.vuejs.org/zh-cn/intro.html" target="_blank" rel="external">vuex</a>将容器中的状态存储在顶层中来进行管理分发。</p>
-<p>那么，如何利用它进行组件化开发呢？Webpack + 官方提供的vue-loader 直接搞 <strong>*.vue</strong>来书写Vue组件，通过vue-devtools调试。另外安装对应的Webpack loader后template里还支持方言呢。    <em>个人感觉模版语法之与React的jsx语法还是模版写起来更明确些。</em></p>
+<p>那么，如何利用它进行组件化开发呢？Webpack + 官方提供的vue-loader 直接搞.vue单文件格式来书写Vue组件，通过vue-devtools调试。另外安装对应的Webpack loader后template里还支持方言呢。    <em>个人感觉模版语法之与React的jsx语法还是模版写起来更明确些。</em></p>
 <p>同时官方提供了Vue-cli这简单粗暴的东西帮你构建项目模版。        <em>搞起来就是贼快。</em></p>
 <p>此外还有，<a href="http://jiongks.name/blog/announcing-vue-2/" target="_blank" rel="external">令人期待的Vue 2.0</a>。</p>
 <h3 id="Vue-Router"><a href="#Vue-Router" class="headerlink" title="Vue-Router"></a>Vue-Router</h3><p><a href="http://router.vuejs.org/zh-cn/index.html" target="_blank" rel="external">Vue-Router</a>是Vue官方提供的路由器。用来帮助Vue项目构筑路由系统。使用router.map()配置app中的路径后，除了使用实例方法外进行切换外，使用在组件上配置v-link=””进行跳转。vue-router将路由跳转的过程细分，用户可以通过配置容器组件中route项调用跳转过程中不同阶段的hook函数，以此来在切换过程中做其他事情，比如请求数据，调用methods什么的。</p>
 <h2 id="Views"><a href="#Views" class="headerlink" title="Views"></a>Views</h2><p>项目包含以下页面：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">router.map(&#123;</div><div class="line">  <span class="string">'/'</span>: &#123;</div><div class="line">    component: list,</div><div class="line">    subRoutes: &#123;</div><div class="line">      <span class="string">'/'</span>: &#123;<span class="comment">//初始的list页</span></div><div class="line">        component: mainDefault</div><div class="line">      &#125;,</div><div class="line">      <span class="string">'/theme/:id'</span>: &#123;<span class="comment">//侧边sidebar进入的主题详情页</span></div><div class="line">        name: <span class="string">'theme'</span>,</div><div class="line">        component: mainTheme</div><div class="line">      &#125;,</div><div class="line">    &#125;</div><div class="line">  &#125;,</div><div class="line">  <span class="string">'/detail/:id'</span>: &#123;<span class="comment">//内容详情页</span></div><div class="line">    name: <span class="string">'detail'</span>,</div><div class="line">    component: detail</div><div class="line">  &#125;,</div><div class="line">  <span class="string">'/comments'</span>: &#123;<span class="comment">//评论详情页</span></div><div class="line">    component: comments</div><div class="line">  &#125;,</div><div class="line">  <span class="string">'/recommenders'</span>: &#123;<span class="comment">//内容推荐者页</span></div><div class="line">    component: recommenders</div><div class="line">  &#125;,</div><div class="line">  <span class="string">'/section'</span>: &#123;<span class="comment">//内容所属栏目汇总页</span></div><div class="line">    component: section</div><div class="line">  &#125;,</div><div class="line">  <span class="string">'/lany44'</span>: &#123;<span class="comment">//个人简介，用来顺便求职前端实习。却没能提供在线版 orz</span></div><div class="line">    component: lany44</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">router.map(&#123;</div><div class="line">  <span class="string">'/'</span>: &#123;</div><div class="line">    component: list,</div><div class="line">    subRoutes: &#123;</div><div class="line">      <span class="string">'/'</span>: &#123;<span class="comment">//初始的list页</span></div><div class="line">        component: mainDefault</div><div class="line">      &#125;,</div><div class="line">      <span class="string">'/theme/:id'</span>: &#123;<span class="comment">//侧边sidebar进入的主题详情页</span></div><div class="line">        name: <span class="string">'theme'</span>,</div><div class="line">        component: mainTheme</div><div class="line">      &#125;,</div><div class="line">    &#125;</div><div class="line">  &#125;,</div><div class="line">  <span class="string">'/detail/:id'</span>: &#123;<span class="comment">//内容详情页</span></div><div class="line">    name: <span class="string">'detail'</span>,</div><div class="line">    component: detail</div><div class="line">  &#125;,</div><div class="line">  <span class="string">'/comments'</span>: &#123;<span class="comment">//评论详情页</span></div><div class="line">    component: comments</div><div class="line">  &#125;,</div><div class="line">  <span class="string">'/recommenders'</span>: &#123;<span class="comment">//内容推荐者页</span></div><div class="line">    component: recommenders</div><div class="line">  &#125;,</div><div class="line">  <span class="string">'/section'</span>: &#123;<span class="comment">//内容所属栏目汇总页</span></div><div class="line">    component: section</div><div class="line">  &#125;,</div><div class="line">  <span class="string">'/lany44'</span>: &#123;<span class="comment">//个人简介，用来顺便求职前端实习。 orz</span></div><div class="line">    component: lany44</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
 <p>部分实现：</p>
 <ul>
 <li>初始列表的动态加载以及列表重定位到上次浏览的地方。这部分代码写在main-default和detail组件中。通过路由系统的钩子函数，在激活阶段调用data()函数向windows绑定添加列表和修改顶部日期的事件，并判断当前url的name。将当前的scrollTop存在sessionStorage中，在detail的跳转中重定位列表的scrollTop。</li>
 </ul>
 <ul>
-<li>GET请求部分没有使用Vue-Resource而使用了<a href="https://github.com/camsong/blog/issues/2?hmsr=toutiao.io&amp;utm_medium=toutiao.io&amp;utm_source=toutiao.io" target="_blank" rel="external">fetch()</a>，开始是听说它可以帮我解决跨域的问题，<a href="https://fetch.spec.whatwg.org/#http-cors-protocol" target="_blank" rel="external">英文的文档</a>看不太懂，似懂非懂的用了起来，结果自然是失败了。不知道是不是header配置写的不对。最后开发阶段用chrome插件Allow-Control-Allow-Origin拿到了数据。        <em>orz</em></li>
-<li>主页侧滑列表的show hide由于多个地方可以控制，我将方法写在了util里一一绑定了事件。当这样的情况变多时就会越发难以控制，这时候就需要vuex了。</li>
+<li>GET请求部分没有使用Vue-Resource而使用了<a href="https://github.com/camsong/blog/issues/2?hmsr=toutiao.io&amp;utm_medium=toutiao.io&amp;utm_source=toutiao.io" target="_blank" rel="external">fetch()</a>，开始是听说它可以帮我解决跨域的问题，似懂非懂的用了起来，结果失败了。不知道是不是header配置写的不对。本地开发阶段用chrome插件Allow-Control-Allow-Origin拿到了数据。        <em>orz</em></li>
+<li>主页侧滑列表的show hide由于多个地方可以控制，我将方法写在了util里一一绑定了事件。当这样的情况变多时就会越发难以控制。</li>
+<li>所用到的图片，参考<a href="http://tangrui.win/2016/01/09/%E7%BC%96%E5%86%99%E4%B8%80%E4%B8%AA%E8%BD%BB%E7%9F%A5%E4%B9%8E%E6%97%A5%E6%8A%A5/#more" target="_blank" rel="external">链接</a>。</li>
 </ul>
-<h2 id="Components"><a href="#Components" class="headerlink" title="Components"></a>Components</h2><p>项目功能趋于展示，全局只写了一个events…大部分参数用props传下去就可以了。     <em>很简单啊</em></p>
+<h2 id="Components"><a href="#Components" class="headerlink" title="Components"></a>Components</h2><p>项目功能趋于展示，全局只写了一个events…大部分参数分析接口数据后用props传下去就可以了。</p>
 <p>简单介绍下组件们</p>
 <ul>
 <li>comments-comp——-单个评论     </li>
@@ -56,11 +181,16 @@
 <li>第一次以组建化思想写的完整项目，一开始就知道怼头部……      <em>(hahahh</em></li>
 </ul>
 <ul>
-<li>list-comp实现了复用，其实每次有新的需求时，都是返回去稍微改改。组件化滴好啊。</li>
+<li><p>list-comp实现了复用，其实每次有新的需求时，都是返回去稍微改改。</p>
+</li>
+<li><p>comments-comp单个评论组件里格式化时间戳，接口返回的评论时间是”time”: 1413600071的格式。</p>
+<p>这里贴下格式化时间戳的代码，当然不是我写的。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*</span></div><div class="line">  格式化时间戳</div><div class="line">  1469175239 ｜ fommatTime "yyyy-mm-dd hh-mm-ss"</div><div class="line"> */</div><div class="line"><span class="keyword">const</span> formatTimeAPI = (timeStamp, fmt) =&gt; &#123;<span class="comment">// author: meizz</span></div><div class="line">  <span class="keyword">if</span>(!timeStamp)</div><div class="line">    <span class="keyword">return</span> <span class="string">''</span></div><div class="line"></div><div class="line">  <span class="keyword">var</span> _timeStamp = <span class="built_in">parseInt</span>(timeStamp)</div><div class="line">  <span class="keyword">if</span>(_timeStamp.toString().length === <span class="number">10</span>)</div><div class="line">    _timeStamp *= <span class="number">1000</span></div><div class="line"></div><div class="line">  !fmt &amp;&amp; (fmt = <span class="string">'yyyy-mm-dd'</span>)</div><div class="line"></div><div class="line">  <span class="keyword">var</span> t = <span class="keyword">new</span> <span class="built_in">Date</span>(_timeStamp)</div><div class="line"></div><div class="line">  <span class="keyword">var</span> o = &#123;</div><div class="line">    <span class="string">'M+'</span>: t.getMonth() + <span class="number">1</span>,</div><div class="line">    <span class="string">'d+'</span>: t.getDate(),</div><div class="line">    <span class="string">'h+'</span>: t.getHours(),</div><div class="line">    <span class="string">'m+'</span>: t.getMinutes(),</div><div class="line">    <span class="string">'s+'</span>: t.getSeconds(),</div><div class="line">    <span class="string">'q+'</span>: <span class="built_in">Math</span>.floor((t.getMonth() + <span class="number">3</span>)/ <span class="number">3</span>),</div><div class="line">    <span class="string">'S'</span>: t.getMilliseconds() </div><div class="line">  &#125;</div><div class="line">  <span class="keyword">if</span>(<span class="regexp">/(y+)/</span>.test(fmt)) </div><div class="line">    fmt = fmt.replace(<span class="built_in">RegExp</span>.$<span class="number">1</span>, (t.getFullYear() + <span class="string">''</span>).substr(<span class="number">4</span> - <span class="built_in">RegExp</span>.$<span class="number">1.</span>length))</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> k <span class="keyword">in</span> o) &#123;</div><div class="line">      <span class="keyword">if</span> (<span class="keyword">new</span> <span class="built_in">RegExp</span>(<span class="string">'('</span> + k + <span class="string">')'</span>).test(fmt))</div><div class="line">        fmt = fmt.replace(<span class="built_in">RegExp</span>.$<span class="number">1</span>, (<span class="built_in">RegExp</span>.$<span class="number">1.</span>length ===<span class="number">1</span>)? (o[k]) : ((<span class="string">'00'</span> + 				  o[k]).substr((<span class="string">''</span>+o[k]).length)))</div><div class="line">    &#125;</div><div class="line">  <span class="keyword">return</span> fmt</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
 </ul>
 <h2 id="Finally"><a href="#Finally" class="headerlink" title="Finally"></a>Finally</h2><p>感谢喻导，接触前端一年了都是一个人在闷头苦学，走了不不知道多少弯路。后来认识喻导，几次交流都一直鼓励我动手去做，东西先用起来。现在我越来越自信了，前端之路也会走的更加坚定。最后祝愿你的教育事业能一帆风顺。</p>
 <p>感谢yatessss，项目里给了我不小的帮助。超nice的前辈。</p>
-<p>最后要来一剂安利，Vue非常容易上手，API优美，文档好读，外加Vue-cli，vue-devtools套餐。你不来一套吗。<em>(我这样的弱者都能很快用起来，你萌还等啥呢)</em></p>
+<p>最后要来一剂安利，Vue非常容易上手，文档好读，外加Vue-cli，vue-devtools。你不想来一套吗。<em>(我这样的弱者都能很快用起来)</em></p>
 ]]></content>
     </entry>
     
