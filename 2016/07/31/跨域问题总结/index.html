@@ -88,13 +88,13 @@
 
 <meta name="description" content="之前web知乎项目需要从知乎服务器上请求数据，遇到了请求跨域的问题。我将了解到的解决方案做下总结。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="AJAX请求跨域问题总结">
+<meta property="og:title" content="跨域请求问题总结">
 <meta property="og:url" content="http://lany44.github.io/2016/07/31/跨域问题总结/index.html">
 <meta property="og:site_name" content="lany44">
 <meta property="og:description" content="之前web知乎项目需要从知乎服务器上请求数据，遇到了请求跨域的问题。我将了解到的解决方案做下总结。">
-<meta property="og:updated_time" content="2016-08-02T14:23:47.000Z">
+<meta property="og:updated_time" content="2016-08-02T14:30:07.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="AJAX请求跨域问题总结">
+<meta name="twitter:title" content="跨域请求问题总结">
 <meta name="twitter:description" content="之前web知乎项目需要从知乎服务器上请求数据，遇到了请求跨域的问题。我将了解到的解决方案做下总结。">
 
 
@@ -113,7 +113,7 @@
   };
 </script>
 
-  <title> AJAX请求跨域问题总结 | lany44 </title>
+  <title> 跨域请求问题总结 | lany44 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -286,7 +286,7 @@
             
             
               
-                AJAX请求跨域问题总结
+                跨域请求问题总结
               
             
           </h1>
@@ -362,7 +362,7 @@
 <li>AJAX 请求不能发送。</li>
 </ol>
 <p>举个例子：</p>
-<p>下表给出了相对<a href="http://store.company.com/dir/page.html同源检测的示例" target="_blank" rel="external">http://store.company.com/dir/page.html同源检测的示例</a>:</p>
+<p>下表给出了相对<code>http://store.company.com/dir/page.html</code>同源检测的示例:</p>
 <table>
 <thead>
 <tr>
@@ -462,11 +462,11 @@
 <p>官方描述：Allows to you request any site with ajax from any source. Adds to response ‘Allow-Control-Allow-Origin: *’ header</p>
 <p>本地开发调试时使用的就是他。再次感谢yatessss前辈，非常方便。</p>
 <h2 id="反向代理转发"><a href="#反向代理转发" class="headerlink" title="反向代理转发"></a>反向代理转发</h2><p>这种解决办法的思想为：架设服务器代理。浏览器请求同源服务器，再由后者请求外部服务。</p>
-<p>这里主要介绍利用nginx做代理服务器。</p>
+<p>这里介绍利用nginx做代理服务器。</p>
 <p>mac下修改配置文件：/usr/local/etc/nginx/nginx.conf </p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">server &#123;</div><div class="line">    listen       <span class="number">8000</span>;</div><div class="line">    server_name  api.a.com;</div><div class="line">    location /data/&#123;</div><div class="line">        proxy_pass http:<span class="comment">//b.com/;</span></div><div class="line">        add_header Content-Type <span class="string">"text/plain;charset=utf-8"</span>;</div><div class="line">        add_header <span class="string">'Access-Control-Allow-Origin'</span> <span class="string">'a.com'</span>;   </div><div class="line">        add_header <span class="string">'Access-Control-Allow-Credentials'</span> <span class="string">'true'</span>; </div><div class="line">        add_header <span class="string">'Access-Control-Allow-Methods'</span> <span class="string">'GET'</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>a.com下去往api.a.com/data/下的请求都会转发到b.com/。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>若是能操作到后端，那么JSONP，CORS都不是难事，否则还是乖乖搭个服务器做代理转发。或者像我那个项目一样，利用chrome插件暂时解决一下。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>若是能操作到后端，那么JSONP，CORS都不是难事，否则还是乖乖搭个服务器做代理转发。或者利用chrome插件暂时解决一下。</p>
 <h2 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h2><blockquote>
 <p>[1] 阮一峰. <a href="http://www.ruanyifeng.com/blog/2016/04/same-origin-policy.html" target="_blank" rel="external">浏览器同源政策及其规避方法</a>[CP/OL].</p>
 </blockquote>
@@ -559,7 +559,7 @@
   <div class="comments" id="comments">
     
       <div class="ds-thread" data-thread-key="2016/07/31/跨域问题总结/"
-           data-title="AJAX请求跨域问题总结" data-url="http://lany44.github.io/2016/07/31/跨域问题总结/">
+           data-title="跨域请求问题总结" data-url="http://lany44.github.io/2016/07/31/跨域问题总结/">
       </div>
     
   </div>

@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://lany44.github.io/"/>
-  <updated>2016-08-02T14:23:47.000Z</updated>
+  <updated>2016-08-02T14:30:07.000Z</updated>
   <id>http://lany44.github.io/</id>
   
   <author>
@@ -16,11 +16,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>AJAX请求跨域问题总结</title>
+    <title>跨域请求问题总结</title>
     <link href="http://lany44.github.io/2016/07/31/%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/"/>
     <id>http://lany44.github.io/2016/07/31/跨域问题总结/</id>
     <published>2016-07-30T16:00:00.000Z</published>
-    <updated>2016-08-02T14:23:47.000Z</updated>
+    <updated>2016-08-02T14:30:07.000Z</updated>
     
     <content type="html"><![CDATA[<p>之前web知乎项目需要从知乎服务器上请求数据，遇到了请求跨域的问题。我将了解到的解决方案做下总结。</p>
 <a id="more"></a>
@@ -32,7 +32,7 @@
 <li>AJAX 请求不能发送。</li>
 </ol>
 <p>举个例子：</p>
-<p>下表给出了相对<a href="http://store.company.com/dir/page.html同源检测的示例" target="_blank" rel="external">http://store.company.com/dir/page.html同源检测的示例</a>:</p>
+<p>下表给出了相对<code>http://store.company.com/dir/page.html</code>同源检测的示例:</p>
 <table>
 <thead>
 <tr>
@@ -132,11 +132,11 @@
 <p>官方描述：Allows to you request any site with ajax from any source. Adds to response ‘Allow-Control-Allow-Origin: *’ header</p>
 <p>本地开发调试时使用的就是他。再次感谢yatessss前辈，非常方便。</p>
 <h2 id="反向代理转发"><a href="#反向代理转发" class="headerlink" title="反向代理转发"></a>反向代理转发</h2><p>这种解决办法的思想为：架设服务器代理。浏览器请求同源服务器，再由后者请求外部服务。</p>
-<p>这里主要介绍利用nginx做代理服务器。</p>
+<p>这里介绍利用nginx做代理服务器。</p>
 <p>mac下修改配置文件：/usr/local/etc/nginx/nginx.conf </p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">server &#123;</div><div class="line">    listen       <span class="number">8000</span>;</div><div class="line">    server_name  api.a.com;</div><div class="line">    location /data/&#123;</div><div class="line">        proxy_pass http:<span class="comment">//b.com/;</span></div><div class="line">        add_header Content-Type <span class="string">"text/plain;charset=utf-8"</span>;</div><div class="line">        add_header <span class="string">'Access-Control-Allow-Origin'</span> <span class="string">'a.com'</span>;   </div><div class="line">        add_header <span class="string">'Access-Control-Allow-Credentials'</span> <span class="string">'true'</span>; </div><div class="line">        add_header <span class="string">'Access-Control-Allow-Methods'</span> <span class="string">'GET'</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>a.com下去往api.a.com/data/下的请求都会转发到b.com/。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>若是能操作到后端，那么JSONP，CORS都不是难事，否则还是乖乖搭个服务器做代理转发。或者像我那个项目一样，利用chrome插件暂时解决一下。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>若是能操作到后端，那么JSONP，CORS都不是难事，否则还是乖乖搭个服务器做代理转发。或者利用chrome插件暂时解决一下。</p>
 <h2 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h2><blockquote>
 <p>[1] 阮一峰. <a href="http://www.ruanyifeng.com/blog/2016/04/same-origin-policy.html" target="_blank" rel="external">浏览器同源政策及其规避方法</a>[CP/OL].</p>
 </blockquote>
@@ -160,7 +160,7 @@
     <link href="http://lany44.github.io/2016/07/24/vue+vue-router%E5%AE%9E%E7%8E%B0%E7%9A%84%E7%9F%A5%E4%B9%8E%E6%97%A5%E6%8A%A5/"/>
     <id>http://lany44.github.io/2016/07/24/vue+vue-router实现的知乎日报/</id>
     <published>2016-07-23T16:00:00.000Z</published>
-    <updated>2016-08-02T13:44:33.000Z</updated>
+    <updated>2016-08-02T14:31:23.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h2><p>大约一周前喻导从掘金vue版块看到一个vue实现知乎日报的项目，然后顺手又一次向我使出大安利术。终于在他煽动下，我大概看了下前辈项目的源码（我去，我竟然能看懂），之后一边看文档一边自己也试着实现了出来。因为之前一直在学习React生态圈相关，对component，container，state，生命周期等概念有了理解，加上vue本身的易用原则，文档又写的详细易懂。所以总体下来自己在一边感叹vue API优美的同时（<em>跟风</em>），也写的很爽。</p>
 <a id="more"></a>
@@ -222,7 +222,7 @@
 </ul>
 <h2 id="Finally"><a href="#Finally" class="headerlink" title="Finally"></a>Finally</h2><p>感谢喻导，接触前端一年了都是一个人在闷头苦学，走了不不知道多少弯路。后来认识喻导，几次交流都一直鼓励我动手去做，东西先用起来。现在我越来越自信了，前端之路也会走的更加坚定。最后祝愿你的教育事业能一帆风顺。</p>
 <p>感谢yatessss，项目里给了我不小的帮助。超nice的前辈。</p>
-<p>最后要来一剂安利，Vue非常容易上手，文档好读，外加Vue-cli，vue-devtools。你不想来一套吗。<em>(我这样的弱者都能很快用起来)</em></p>
+<p>最后要来一剂安利，Vue非常容易上手，文档好读，外加Vue-cli，vue-devtools。你不想来一套吗。</p>
 ]]></content>
     
     <summary type="html">
