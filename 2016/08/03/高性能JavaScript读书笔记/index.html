@@ -1,0 +1,1066 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="JavaScript," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="lany44" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="《高性能javascript》是高程作者的另一力作，终于借了本来读，同时做了篇读书笔记。
+书中一共有十个章节，笔记只包含前八章和开发者工具Timeline面板介绍。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="高性能JavaScript读书笔记">
+<meta property="og:url" content="http://lany44.github.io/2016/08/03/高性能JavaScript读书笔记/index.html">
+<meta property="og:site_name" content="lany44">
+<meta property="og:description" content="《高性能javascript》是高程作者的另一力作，终于借了本来读，同时做了篇读书笔记。
+书中一共有十个章节，笔记只包含前八章和开发者工具Timeline面板介绍。">
+<meta property="og:image" content="http://lany44.github.io/./1.png">
+<meta property="og:image" content="http://lany44.github.io/2.png">
+<meta property="og:image" content="http://lany44.github.io/3.png">
+<meta property="og:image" content="http://lany44.github.io/4.png">
+<meta property="og:image" content="http://lany44.github.io/5.png">
+<meta property="og:updated_time" content="2016-08-03T13:50:46.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="高性能JavaScript读书笔记">
+<meta name="twitter:description" content="《高性能javascript》是高程作者的另一力作，终于借了本来读，同时做了篇读书笔记。
+书中一共有十个章节，笔记只包含前八章和开发者工具Timeline面板介绍。">
+<meta name="twitter:image" content="http://lany44.github.io/./1.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主大人'
+    }
+  };
+</script>
+
+  <title> 高性能JavaScript读书笔记 | lany44 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?74492af5430b0958dfb2be4fc2621c36";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">lany44</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                高性能JavaScript读书笔记
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-03T00:00:00+08:00" content="2016-08-03">
+              2016-08-03
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/技术日记/" itemprop="url" rel="index">
+                    <span itemprop="name">技术日记</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/03/高性能JavaScript读书笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/03/高性能JavaScript读书笔记/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>《高性能javascript》是高程作者的另一力作，终于借了本来读，同时做了篇读书笔记。</p>
+<p>书中一共有十个章节，笔记只包含前八章和开发者工具Timeline面板介绍。</p>
+<a id="more"></a>
+<h2 id="第一章：加载与执行"><a href="#第一章：加载与执行" class="headerlink" title="第一章：加载与执行"></a>第一章：加载与执行</h2><ol>
+<li><code>&lt;script&gt;</code>标签放在body底部，确保脚本执行时页面完成渲染。</li>
+<li>合并<code>&lt;script&gt;</code>标签减少http请求。</li>
+<li>无阻塞下载模式：<ul>
+<li><code>&lt;script&gt;</code>的defer属性，延迟到window.load事件后下载</li>
+<li>dom操作动态创建<code>&lt;script&gt;</code>标签，做lazyload。</li>
+<li>利用xhr对象发起ajax请求向页面注入<code>&lt;script&gt;</code>标签。</li>
+</ul>
+</li>
+</ol>
+<h2 id="第二章：数据存取"><a href="#第二章：数据存取" class="headerlink" title="第二章：数据存取"></a>第二章：数据存取</h2><ol>
+<li>函数通过作用域链来读写变量。所以位置越深的变量访问的时间就越长。访问对象的属性与方法依赖原型链，也是一个道理。所以应将多次访问的深层变量保存到局部。</li>
+<li>with([document])与catch(){}会临时添加作用域顶部，所以避免使用with。将catch里的处理交给函数，减少catch内的操作。</li>
+</ol>
+<h2 id="第三章：DOM编程"><a href="#第三章：DOM编程" class="headerlink" title="第三章：DOM编程"></a>第三章：DOM编程</h2><p>js通过DOM对象这座桥梁操作文档中的节点，所以DOM天生就慢。修改元素更为昂贵，因为他会导致浏览器重新计算页面的几何变化。<em>想起很早以前js实现的一个动画……orz</em></p>
+<ol>
+<li><p>减少DOM访问次数，多次访问请使用局部变量大法。</p>
+</li>
+<li><p>小心处理HTML对象集合，集合的length属性会实时变化。多次访问操作，请把它拷贝到数组。</p>
+</li>
+<li><p>使用更快的API：querySelectorAll与querySelcetor。原因简单来说就是这个API是倒过来解析DOM树的。详情见：<a href="http://www.cnblogs.com/aaronjs/p/3300797.html" target="_blank" rel="external">Aaron大神的jQuery 2.0.3 源码分析Sizzle引擎 - 词法解析</a>。</p>
+</li>
+<li><p>动画优化：</p>
+<ul>
+<li><a href="http://www.w3cplus.com/css3/introduction-to-hardware-acceleration-css-animations.html" target="_blank" rel="external">CSS动画之硬件加速</a></li>
+<li><a href="http://zencode.in/14.CSS%E5%8A%A8%E7%94%BB%E7%9A%84%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96.html" target="_blank" rel="external">CSS动画的性能优化</a></li>
+</ul>
+</li>
+<li><p>用事件委托来减少事件处理器的数量：</p>
+<ul>
+<li>由于事件绑定通产发生在window.onload阶段，容易发生拥堵。且并不是每个按钮都会被用户触发。</li>
+<li>事件委托的基本思想是，将事件绑定在外层元素，由外层元素捕获触发事件，然后对内层元素进行操作。</li>
+</ul>
+</li>
+<li><p>重绘reflow与重排repaint－这里打算详细讲下。</p>
+<ul>
+<li><p>首先浏览器下载完页面中的所有组建后会生成2个内部的数据结构，一是DOM树，二是渲染树（表示DOM节点如何显示）<a href="https://developers.google.com/web/fundamentals/performance/critical-rendering-path/render-tree-construction?hl=zh-cn" target="_blank" rel="external">详细</a>。页面几何变化时引发<strong>重排</strong>（重新构造渲染树），之后改变屏幕显示的过程叫<strong>重绘</strong>。2者都是代价昂贵的操作，因此要尽量减少重绘与重排。</p>
+</li>
+<li><p>获取当前布局信息如offsetTop，getComputedStyle()会强制触发重排以返回正确的值。（<em>该用还是得用不是吗</em>）</p>
+</li>
+<li><p>最小化重绘重排：</p>
+<ul>
+<li><p><strong>改变样式时：</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> el = <span class="built_in">document</span>.getElementById(<span class="string">'mydiv'</span>);</div><div class="line">el.style.borderLeft = <span class="string">'1px'</span>; </div><div class="line">el.style.borderRight = <span class="string">'2px'</span>;</div><div class="line">el.style.padding = <span class="string">'5px'</span>;</div></pre></td></tr></table></figure>
+<p>这样添加样式，每一次都会改变元素的几何属性，在一些旧版浏览器中可能会引起三次重排（现代浏览器会做优化处理，发生一次重排），所以可以优化一下代码，合并样式一次性修改：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> el = <span class="built_in">document</span>.getElementById(<span class="string">'mydiv'</span>);</div><div class="line"><span class="comment">//替换样式</span></div><div class="line">el.style.cssText = <span class="string">'border-left: 1px; border-right: 2px; padding: 5px;'</span>;</div><div class="line"><span class="comment">//保留原有样式</span></div><div class="line">el.style.cssText += <span class="string">'; border-left: 1px;'</span>;</div></pre></td></tr></table></figure>
+<p>这样修改只会引起一次重排，更为高效。</p>
+<p>还有一种做法就是为想要修改的部分添加一个<code>class</code>使用css一次性修改。</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<pre><code>- **批量修改DOM时：**
+
+  如果我们需要对DOM进行一系列操作的时候，可以通过下面的做法来减少重绘和重排：
+
+  1. 使元素脱离文档流。
+  2. 对其进行操作。
+  3. 把元素带回文档中。
+
+  这样如果我们在第二步进行多次操作时，也只会在第一步和第三步触发两次重排。
+
+  有三种基本方法可以使DOM脱离文档流:
+
+  1. 隐藏元素，修改，重新显示。
+  2. 使用文档片断（document fragment），在当前DOM外构建一个子树，再把它插入文档中。
+  3. 把原始元素拷贝到脱离文档的节点中，修改后在把原始元素替换掉。
+
+  用代码来说明三种方法：
+
+  比如现在我们有一个`ul`列表，我们用一个方法`appendDataElement()`往列表中添加`li`。
+
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//要操作的列表</span></div><div class="line"><span class="keyword">var</span> ul = <span class="built_in">document</span>.getElementById(<span class="string">'mylist'</span>);</div><div class="line"><span class="comment">//向列表中添加li，data是li中的内容</span></div><div class="line">appendDataToElement(ul, data);</div></pre></td></tr></table></figure>
+
+  如果我们不使用任何方法的话，每插入一个`li`就会触发一次重排，这样是很影响性能的。所以我们可以使用上面的三种方法。
+
+  方法一：
+
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> ul = <span class="built_in">document</span>.getElementById(<span class="string">'mylist'</span>);</div><div class="line">ul.style.display = <span class="string">'none'</span>; </div><div class="line">appendDataToElement(ul, data);</div><div class="line">ul.style.display = <span class="string">'block'</span>;</div></pre></td></tr></table></figure>
+
+  **方法二：（推荐）**
+
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fragment = <span class="built_in">document</span>.createDocumentFragment();</div><div class="line">appendDataToElement(fragment, data);</div><div class="line"><span class="built_in">document</span>.getElementById(<span class="string">'mylist'</span>).appendChild(fragment);</div></pre></td></tr></table></figure>
+
+  方法三：
+
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> old = <span class="built_in">document</span>.getElementById(<span class="string">'mylist'</span>); </div><div class="line"><span class="keyword">var</span> clone = old.cloneNode(<span class="literal">true</span>);</div><div class="line">appendDataToElement(clone, data);</div><div class="line">old.parentNode.replaceChild(clone, old);</div></pre></td></tr></table></figure>
+
+  文章中是推荐我们使用第二种方法，因为这种方法本来设计的初衷就是为了解决这类任务的（更新和移动节点）。而且这种方法只触发一次重拍，只访问一次DOM节点
+</code></pre><h2 id="第四章：算法与流程控制"><a href="#第四章：算法与流程控制" class="headerlink" title="第四章：算法与流程控制"></a>第四章：算法与流程控制</h2><ol>
+<li><p>循环：</p>
+<ul>
+<li><p>只有for-in慢于其他循环类型。第一步应减少数组属性的查询次数（见第二章），第二步采用倒序循环，让控制条件与0比较。非0会转化为true，0会变成false。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i=items.length; i--; ) &#123;</div><div class="line">  process(items[i])</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> i = items.length</div><div class="line"><span class="keyword">while</span> (i--) &#123;</div><div class="line">  process(items[i])</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> i = items.length<span class="number">-1</span></div><div class="line"><span class="keyword">do</span> &#123;</div><div class="line">  process(items[i])</div><div class="line">&#125;<span class="keyword">while</span> (i--);</div></pre></td></tr></table></figure>
+</li>
+<li><p>当循环次数多时，采用“<a href="https://zh.wikipedia.org/wiki/%E8%BE%BE%E5%A4%AB%E8%AE%BE%E5%A4%87" target="_blank" rel="external">达夫设备</a>”来减少循环次数。</p>
+</li>
+</ul>
+</li>
+<li><p>条件语句：</p>
+<ul>
+<li>优化if-else，将最可能出现的条件放在首位。</li>
+<li>特殊情况使用”<a href="https://zh.wikipedia.org/wiki/%E6%9F%A5%E6%89%BE%E8%A1%A8" target="_blank" rel="external">查找表</a>“。</li>
+<li>递归的模式与调用栈限制，超出限制时应改为迭代算法。</li>
+</ul>
+</li>
+</ol>
+<h2 id="第五章：字符串和正则表达式"><a href="#第五章：字符串和正则表达式" class="headerlink" title="第五章：字符串和正则表达式"></a>第五章：字符串和正则表达式</h2><ol>
+<li><p>字符串拼接：除了ie7-，大部分浏览器对+ &amp; +=进行了很好的优化，但你还是要避免临时字符串的产生。若是要考虑ie7-，应该使用Array.prototype.join()；</p>
+</li>
+<li><p>正则表达式优化：</p>
+<p>额，这里先占个坑。。</p>
+</li>
+</ol>
+<h2 id="第六章：快速响应的用户界面"><a href="#第六章：快速响应的用户界面" class="headerlink" title="第六章：快速响应的用户界面"></a>第六章：快速响应的用户界面</h2><p>js与用户界面更新在同一个进程中运行，因此同时只能处理一件事情。所以要高效的关系UI线程，确保js不能运行太长的时间。</p>
+<ol>
+<li><p>任何js任务都不能超过100ms，否则会对用户感受到与页面失联。且js运行期间，浏览器响应用户的交互存在差异。</p>
+</li>
+<li><p>可以利用定时器安排代码的延迟执行。</p>
+</li>
+<li><p>web workers允许你在UI线程外部执行js代码。从而避免UI锁定。</p>
+<ul>
+<li><p>每个web worker运行在UI线程的一个子集环境中，拥有部分js脚本的特性。</p>
+<ul>
+<li><code>navigator</code> 对象</li>
+<li><code>location</code> 对象（只读）</li>
+<li><code>XMLHttpRequest</code></li>
+<li><code>setTimeout()/clearTimeout()</code> 和 <code>setInterval()/clearInterval()</code></li>
+<li><a href="http://www.html5rocks.com/tutorials/appcache/beginner/" target="_blank" rel="external">应用缓存</a></li>
+<li>使用 <code>importScripts()</code> 方法导入外部脚本</li>
+<li><a href="http://www.html5rocks.com/zh/tutorials/workers/basics/#toc-enviornment-subworkers" target="_blank" rel="external">生成其他 Web Worker</a></li>
+</ul>
+<p>Worker 无法使用：</p>
+<ul>
+<li>DOM（非线程安全）</li>
+<li><code>window</code> 对象</li>
+<li><code>document</code> 对象</li>
+<li><code>parent</code> 对象</li>
+</ul>
+</li>
+<li><p>实际应用：用web worker解析一个很大的JSON</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> worker = <span class="keyword">new</span> Worker(<span class="string">'xxx.js'</span>)</div><div class="line">worker.onmessage = <span class="function"><span class="keyword">function</span>(<span class="params">event</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> jsonData = event.data</div><div class="line">  <span class="comment">//todo</span></div><div class="line">&#125;</div><div class="line">worker.postMessage(jsonText)</div><div class="line"><span class="comment">//xxx.js</span></div><div class="line">self.onmessage = <span class="function"><span class="keyword">function</span>(<span class="params">event</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> jsonText = event.data</div><div class="line">  <span class="keyword">var</span> jsonData = <span class="built_in">JSON</span>.parse(jsonText)</div><div class="line">  self.postMessage(jsonData)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="第七章：AJAX"><a href="#第七章：AJAX" class="headerlink" title="第七章：AJAX"></a>第七章：AJAX</h2><p>关键在于选择正确的数据格式和与之匹配的传输技术。常见的有html，xml，json，json-p。</p>
+<ol>
+<li>万能的减少请求。做资源打包。</li>
+<li>为缩短白屏时间，主要内容加在完毕后，利用AJAX请求次要资源。lazyload</li>
+</ol>
+<h2 id="第八章：编程实践"><a href="#第八章：编程实践" class="headerlink" title="第八章：编程实践"></a>第八章：编程实践</h2><ol>
+<li><p>避免通过eval()和Function()构造器引发的双重求值带来的性能消耗。同样的，给setTimeout()和setInterval()传递函数而不是字符串作为参数。</p>
+</li>
+<li><p>用直接量创建数组和对象。</p>
+</li>
+<li><p>避免重复的浏览器检测，使用延迟加载或条件预加载。其主要思想是只进行一次环检测。</p>
+<ul>
+<li><p>eg：绑定-移除事件的兼容性代码：</p>
+<p>方法一：重复的写法<strong>（不推荐）</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">addHandler</span>(<span class="params">target, eventType, handler</span>) </span>&#123;  </div><div class="line">	<span class="keyword">if</span> (target.addEventListener) &#123;    </div><div class="line">    	target.addEventListener(eventType, handler, <span class="literal">false</span>)</div><div class="line">    &#125; <span class="keyword">else</span> &#123;    </div><div class="line">      	target.attachEvent(<span class="string">"on"</span>, eventType, handler)  </div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">removeHandler</span>(<span class="params">target, eventType, handler</span>) </span>&#123;</div><div class="line">  	<span class="keyword">if</span> (target.removeEventListener) &#123;    </div><div class="line">      	target.removeEventListener(eventType, handler, <span class="literal">false</span>)</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">      	target.detachEvent(<span class="string">"on"</span>, eventType, handler)  </div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>方法二：延迟加载：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">addHandler</span>(<span class="params">target, eventType, handler</span>) </span>&#123;  </div><div class="line">	<span class="keyword">if</span> (target.addEventListener) &#123;  </div><div class="line">      	addHandler = <span class="function"><span class="keyword">function</span>(<span class="params">target, eventType, handler</span>) </span>&#123;</div><div class="line">    		target.addEventListener(eventType, handler, <span class="literal">false</span>)</div><div class="line">      	&#125;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;    </div><div class="line">      	addHandler = <span class="function"><span class="keyword">function</span>(<span class="params">target, eventType, handler</span>) </span>&#123;</div><div class="line">    		target.attachEvent(<span class="string">"on"</span> + eventType, handler)</div><div class="line">      	&#125;  </div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">removeHandler</span>(<span class="params">target, eventType, handler</span>) </span>&#123;</div><div class="line">  	<span class="keyword">if</span> (target.removeEventListener) &#123;    </div><div class="line">        removeHandler = <span class="function"><span class="keyword">function</span>(<span class="params">target, eventType, handler</span>) </span>&#123;</div><div class="line">    		target.removeEventListener(eventType, handler, <span class="literal">false</span>)</div><div class="line">      	&#125;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">      	removeHandler = <span class="function"><span class="keyword">function</span>(<span class="params">target, eventType, handler</span>) </span>&#123;</div><div class="line">    		target.detachEvent(<span class="string">"on"</span>, eventType, handler) </div><div class="line">      	&#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>方法三：条件预加载：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> addHandler = <span class="built_in">document</span>.body.addEventListener ?</div><div class="line">    			 <span class="function"><span class="keyword">function</span>(<span class="params">target, eventType, handler</span>) </span>&#123;</div><div class="line">    				target.addEventListener(eventType, handler, <span class="literal">false</span>)</div><div class="line">      			 &#125;:</div><div class="line">				 <span class="function"><span class="keyword">function</span>(<span class="params">target, eventType, handler</span>) </span>&#123;</div><div class="line">    				target.attachEvent(<span class="string">"on"</span> + eventType, handler)</div><div class="line">      			 &#125;  </div><div class="line"><span class="keyword">var</span> removeHandler = <span class="built_in">document</span>.body.addEventListener ?</div><div class="line">    			 <span class="function"><span class="keyword">function</span>(<span class="params">target, eventType, handler</span>) </span>&#123;</div><div class="line">    				target.removeEventListener(eventType, handler, <span class="literal">false</span>)</div><div class="line">      			 &#125;:</div><div class="line">				 <span class="function"><span class="keyword">function</span>(<span class="params">target, eventType, handler</span>) </span>&#123;</div><div class="line">    				target.attachEvent(<span class="string">"on"</span> + eventType, handler)</div><div class="line">      			 &#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>数学计算时，考虑直接操作数字的二进制形式的位运算。</p>
+<ul>
+<li><p>eg：判断一个数是奇数还是偶数。按位与运算。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">assert</span>(<span class="params">n</span>) </span>&#123;</div><div class="line">	<span class="keyword">if</span> (n &amp; <span class="number">1</span>) &#123;</div><div class="line">    	<span class="built_in">console</span>.log(n + <span class="string">"是奇数"</span>);</div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line">    	<span class="built_in">console</span>.log(n + <span class="string">"是偶数"</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">assert(<span class="number">3</span>); <span class="comment">// 3是奇数</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>使用原生对象，例如Math对象。</p>
+</li>
+</ol>
+<h2 id="第九章：开发者工具的Timeline面板"><a href="#第九章：开发者工具的Timeline面板" class="headerlink" title="第九章：开发者工具的Timeline面板"></a>第九章：开发者工具的Timeline面板</h2><p>利用chrome开发者工具的Timeline面板监测分析页面性能。写到这里实在太困，所以偷了懒…./w\。</p>
+<p>首先，按下 F12 打开”开发者工具”，切换到Timeline面板。</p>
+<p><img src="./1.png" alt="img"></p>
+<p>左上角有一个灰色的圆点，这是录制按钮，按下它会变成红色。然后，在网页上进行一些操作，再按一次按钮完成录制。</p>
+<p>Timeline面板提供两种查看方式：横条的是”事件模式”（Event Mode），显示重新渲染的各种事件所耗费的时间；竖条的是”帧模式”（Frame Mode），显示每一帧的时间耗费在哪里。</p>
+<p>先看”事件模式”，你可以从中判断，性能问题发生在哪个环节，是JavaScript的执行，还是渲染？</p>
+<p><img src="2.png" alt="img"></p>
+<p>不同的颜色表示不同的事件。</p>
+<p><img src="3.png" alt="img"></p>
+<ul>
+<li>蓝色：网络通信和HTML解析</li>
+<li>黄色：JavaScript执行</li>
+<li>紫色：样式计算和布局，即重排</li>
+<li>绿色：重绘</li>
+</ul>
+<p>哪种色块比较多，就说明性能耗费在那里。色块越长，问题越大。</p>
+<p><img src="4.png" alt="img"></p>
+<p><img src="5.png" alt="img"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>书很好读，一天就读完了。可是性能优化岂是一本书，一天能够讲清楚的。看的同时也借助搜索做了一些扩展，如醍醐灌顶一般。大到页面的渲染过程，css动画优化，小到一个操作符，API。收获很大，之后的代码中也要实践起来。啊，犯困twice……</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><blockquote>
+<p>[1] 阮一峰. <a href="http://www.ruanyifeng.com/blog/2015/09/web-page-performance-in-depth.html" target="_blank" rel="external"><strong>网页性能管理详解</strong></a>[CP/OL].</p>
+</blockquote>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JavaScript/" rel="tag">#JavaScript</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/07/31/跨域问题总结/" rel="next" title="跨域请求问题总结">
+                <i class="fa fa-chevron-left"></i> 跨域请求问题总结
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  <p>热评文章</p>
+  <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/08/03/高性能JavaScript读书笔记/"
+           data-title="高性能JavaScript读书笔记" data-url="http://lany44.github.io/2016/08/03/高性能JavaScript读书笔记/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.jpg"
+               alt="lany44" />
+          <p class="site-author-name" itemprop="name">lany44</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/lany44" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/lany44" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/lany44" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#第一章：加载与执行"><span class="nav-number">1.</span> <span class="nav-text">第一章：加载与执行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第二章：数据存取"><span class="nav-number">2.</span> <span class="nav-text">第二章：数据存取</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第三章：DOM编程"><span class="nav-number">3.</span> <span class="nav-text">第三章：DOM编程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第四章：算法与流程控制"><span class="nav-number">4.</span> <span class="nav-text">第四章：算法与流程控制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第五章：字符串和正则表达式"><span class="nav-number">5.</span> <span class="nav-text">第五章：字符串和正则表达式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第六章：快速响应的用户界面"><span class="nav-number">6.</span> <span class="nav-text">第六章：快速响应的用户界面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第七章：AJAX"><span class="nav-number">7.</span> <span class="nav-text">第七章：AJAX</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第八章：编程实践"><span class="nav-number">8.</span> <span class="nav-text">第八章：编程实践</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第九章：开发者工具的Timeline面板"><span class="nav-number">9.</span> <span class="nav-text">第九章：开发者工具的Timeline面板</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">10.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">11.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lany44</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"lany44"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+      
+      <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+      <script src="/js/src/hook-duoshuo.js"></script>
+    
+  
+
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+       search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+    'use strict';
+    $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+            // get the contents from search data
+            isfetched = true;
+            $('.popup').detach().appendTo('.header-inner');
+            var datas = $( "entry", xmlResponse ).map(function() {
+                return {
+                    title: $( "title", this ).text(),
+                    content: $("content",this).text(),
+                    url: $( "url" , this).text()
+                };
+            }).get();
+            var $input = document.getElementById(search_id);
+            var $resultContent = document.getElementById(content_id);
+            $input.addEventListener('input', function(){
+                var matchcounts = 0;
+                var str='<ul class=\"search-result-list\">';                
+                var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                $resultContent.innerHTML = "";
+                if (this.value.trim().length > 1) {
+                // perform local searching
+                datas.forEach(function(data) {
+                    var isMatch = true;
+                    var content_index = [];
+                    var data_title = data.title.trim().toLowerCase();
+                    var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                    var data_url = data.url;
+                    var index_title = -1;
+                    var index_content = -1;
+                    var first_occur = -1;
+                    // only match artiles with not empty titles and contents
+                    if(data_title != '' && data_content != '') {
+                        keywords.forEach(function(keyword, i) {
+                            index_title = data_title.indexOf(keyword);
+                            index_content = data_content.indexOf(keyword);
+                            if( index_title < 0 && index_content < 0 ){
+                                isMatch = false;
+                            } else {
+                                if (index_content < 0) {
+                                    index_content = 0;
+                                }
+                                if (i == 0) {
+                                    first_occur = index_content;
+                                }
+                            }
+                        });
+                    }
+                    // show search results
+                    if (isMatch) {
+                        matchcounts += 1;
+                        str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                        var content = data.content.trim().replace(/<[^>]+>/g,"");
+                        if (first_occur >= 0) {
+                            // cut out 100 characters
+                            var start = first_occur - 20;
+                            var end = first_occur + 80;
+                            if(start < 0){
+                                start = 0;
+                            }
+                            if(start == 0){
+                                end = 50;
+                            }
+                            if(end > content.length){
+                                end = content.length;
+                            }
+                            var match_content = content.substring(start, end);
+                            // highlight all keywords
+                            keywords.forEach(function(keyword){
+                                var regS = new RegExp(keyword, "gi");
+                                match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                            });
+                            
+                            str += "<p class=\"search-result\">" + match_content +"...</p>"
+                        }
+                        str += "</li>";
+                    }
+                })};
+                str += "</ul>";
+                if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+                if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+                $resultContent.innerHTML = str;
+            });
+            proceedsearch();
+        }
+    });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').mousedown(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+  
+
+  
+
+  
+
+</body>
+</html>

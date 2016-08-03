@@ -4,6 +4,217 @@
   
     
     <entry>
+      <title><![CDATA[高性能JavaScript读书笔记]]></title>
+      <url>http://lany44.github.io/2016/08/03/%E9%AB%98%E6%80%A7%E8%83%BDJavaScript%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/</url>
+      <content type="html"><![CDATA[<p>《高性能javascript》是高程作者的另一力作，终于借了本来读，同时做了篇读书笔记。</p>
+<p>书中一共有十个章节，笔记只包含前八章和开发者工具Timeline面板介绍。</p>
+<a id="more"></a>
+<h2 id="第一章：加载与执行"><a href="#第一章：加载与执行" class="headerlink" title="第一章：加载与执行"></a>第一章：加载与执行</h2><ol>
+<li><code>&lt;script&gt;</code>标签放在body底部，确保脚本执行时页面完成渲染。</li>
+<li>合并<code>&lt;script&gt;</code>标签减少http请求。</li>
+<li>无阻塞下载模式：<ul>
+<li><code>&lt;script&gt;</code>的defer属性，延迟到window.load事件后下载</li>
+<li>dom操作动态创建<code>&lt;script&gt;</code>标签，做lazyload。</li>
+<li>利用xhr对象发起ajax请求向页面注入<code>&lt;script&gt;</code>标签。</li>
+</ul>
+</li>
+</ol>
+<h2 id="第二章：数据存取"><a href="#第二章：数据存取" class="headerlink" title="第二章：数据存取"></a>第二章：数据存取</h2><ol>
+<li>函数通过作用域链来读写变量。所以位置越深的变量访问的时间就越长。访问对象的属性与方法依赖原型链，也是一个道理。所以应将多次访问的深层变量保存到局部。</li>
+<li>with([document])与catch(){}会临时添加作用域顶部，所以避免使用with。将catch里的处理交给函数，减少catch内的操作。</li>
+</ol>
+<h2 id="第三章：DOM编程"><a href="#第三章：DOM编程" class="headerlink" title="第三章：DOM编程"></a>第三章：DOM编程</h2><p>js通过DOM对象这座桥梁操作文档中的节点，所以DOM天生就慢。修改元素更为昂贵，因为他会导致浏览器重新计算页面的几何变化。<em>想起很早以前js实现的一个动画……orz</em></p>
+<ol>
+<li><p>减少DOM访问次数，多次访问请使用局部变量大法。</p>
+</li>
+<li><p>小心处理HTML对象集合，集合的length属性会实时变化。多次访问操作，请把它拷贝到数组。</p>
+</li>
+<li><p>使用更快的API：querySelectorAll与querySelcetor。原因简单来说就是这个API是倒过来解析DOM树的。详情见：<a href="http://www.cnblogs.com/aaronjs/p/3300797.html" target="_blank" rel="external">Aaron大神的jQuery 2.0.3 源码分析Sizzle引擎 - 词法解析</a>。</p>
+</li>
+<li><p>动画优化：</p>
+<ul>
+<li><a href="http://www.w3cplus.com/css3/introduction-to-hardware-acceleration-css-animations.html" target="_blank" rel="external">CSS动画之硬件加速</a></li>
+<li><a href="http://zencode.in/14.CSS%E5%8A%A8%E7%94%BB%E7%9A%84%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96.html" target="_blank" rel="external">CSS动画的性能优化</a></li>
+</ul>
+</li>
+<li><p>用事件委托来减少事件处理器的数量：</p>
+<ul>
+<li>由于事件绑定通产发生在window.onload阶段，容易发生拥堵。且并不是每个按钮都会被用户触发。</li>
+<li>事件委托的基本思想是，将事件绑定在外层元素，由外层元素捕获触发事件，然后对内层元素进行操作。</li>
+</ul>
+</li>
+<li><p>重绘reflow与重排repaint－这里打算详细讲下。</p>
+<ul>
+<li><p>首先浏览器下载完页面中的所有组建后会生成2个内部的数据结构，一是DOM树，二是渲染树（表示DOM节点如何显示）<a href="https://developers.google.com/web/fundamentals/performance/critical-rendering-path/render-tree-construction?hl=zh-cn" target="_blank" rel="external">详细</a>。页面几何变化时引发<strong>重排</strong>（重新构造渲染树），之后改变屏幕显示的过程叫<strong>重绘</strong>。2者都是代价昂贵的操作，因此要尽量减少重绘与重排。</p>
+</li>
+<li><p>获取当前布局信息如offsetTop，getComputedStyle()会强制触发重排以返回正确的值。（<em>该用还是得用不是吗</em>）</p>
+</li>
+<li><p>最小化重绘重排：</p>
+<ul>
+<li><p><strong>改变样式时：</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> el = <span class="built_in">document</span>.getElementById(<span class="string">'mydiv'</span>);</div><div class="line">el.style.borderLeft = <span class="string">'1px'</span>; </div><div class="line">el.style.borderRight = <span class="string">'2px'</span>;</div><div class="line">el.style.padding = <span class="string">'5px'</span>;</div></pre></td></tr></table></figure>
+<p>这样添加样式，每一次都会改变元素的几何属性，在一些旧版浏览器中可能会引起三次重排（现代浏览器会做优化处理，发生一次重排），所以可以优化一下代码，合并样式一次性修改：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> el = <span class="built_in">document</span>.getElementById(<span class="string">'mydiv'</span>);</div><div class="line"><span class="comment">//替换样式</span></div><div class="line">el.style.cssText = <span class="string">'border-left: 1px; border-right: 2px; padding: 5px;'</span>;</div><div class="line"><span class="comment">//保留原有样式</span></div><div class="line">el.style.cssText += <span class="string">'; border-left: 1px;'</span>;</div></pre></td></tr></table></figure>
+<p>这样修改只会引起一次重排，更为高效。</p>
+<p>还有一种做法就是为想要修改的部分添加一个<code>class</code>使用css一次性修改。</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<pre><code>- **批量修改DOM时：**
+
+  如果我们需要对DOM进行一系列操作的时候，可以通过下面的做法来减少重绘和重排：
+
+  1. 使元素脱离文档流。
+  2. 对其进行操作。
+  3. 把元素带回文档中。
+
+  这样如果我们在第二步进行多次操作时，也只会在第一步和第三步触发两次重排。
+
+  有三种基本方法可以使DOM脱离文档流:
+
+  1. 隐藏元素，修改，重新显示。
+  2. 使用文档片断（document fragment），在当前DOM外构建一个子树，再把它插入文档中。
+  3. 把原始元素拷贝到脱离文档的节点中，修改后在把原始元素替换掉。
+
+  用代码来说明三种方法：
+
+  比如现在我们有一个`ul`列表，我们用一个方法`appendDataElement()`往列表中添加`li`。
+
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//要操作的列表</span></div><div class="line"><span class="keyword">var</span> ul = <span class="built_in">document</span>.getElementById(<span class="string">'mylist'</span>);</div><div class="line"><span class="comment">//向列表中添加li，data是li中的内容</span></div><div class="line">appendDataToElement(ul, data);</div></pre></td></tr></table></figure>
+
+  如果我们不使用任何方法的话，每插入一个`li`就会触发一次重排，这样是很影响性能的。所以我们可以使用上面的三种方法。
+
+  方法一：
+
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> ul = <span class="built_in">document</span>.getElementById(<span class="string">'mylist'</span>);</div><div class="line">ul.style.display = <span class="string">'none'</span>; </div><div class="line">appendDataToElement(ul, data);</div><div class="line">ul.style.display = <span class="string">'block'</span>;</div></pre></td></tr></table></figure>
+
+  **方法二：（推荐）**
+
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fragment = <span class="built_in">document</span>.createDocumentFragment();</div><div class="line">appendDataToElement(fragment, data);</div><div class="line"><span class="built_in">document</span>.getElementById(<span class="string">'mylist'</span>).appendChild(fragment);</div></pre></td></tr></table></figure>
+
+  方法三：
+
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> old = <span class="built_in">document</span>.getElementById(<span class="string">'mylist'</span>); </div><div class="line"><span class="keyword">var</span> clone = old.cloneNode(<span class="literal">true</span>);</div><div class="line">appendDataToElement(clone, data);</div><div class="line">old.parentNode.replaceChild(clone, old);</div></pre></td></tr></table></figure>
+
+  文章中是推荐我们使用第二种方法，因为这种方法本来设计的初衷就是为了解决这类任务的（更新和移动节点）。而且这种方法只触发一次重拍，只访问一次DOM节点
+</code></pre><h2 id="第四章：算法与流程控制"><a href="#第四章：算法与流程控制" class="headerlink" title="第四章：算法与流程控制"></a>第四章：算法与流程控制</h2><ol>
+<li><p>循环：</p>
+<ul>
+<li><p>只有for-in慢于其他循环类型。第一步应减少数组属性的查询次数（见第二章），第二步采用倒序循环，让控制条件与0比较。非0会转化为true，0会变成false。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i=items.length; i--; ) &#123;</div><div class="line">  process(items[i])</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> i = items.length</div><div class="line"><span class="keyword">while</span> (i--) &#123;</div><div class="line">  process(items[i])</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> i = items.length<span class="number">-1</span></div><div class="line"><span class="keyword">do</span> &#123;</div><div class="line">  process(items[i])</div><div class="line">&#125;<span class="keyword">while</span> (i--);</div></pre></td></tr></table></figure>
+</li>
+<li><p>当循环次数多时，采用“<a href="https://zh.wikipedia.org/wiki/%E8%BE%BE%E5%A4%AB%E8%AE%BE%E5%A4%87" target="_blank" rel="external">达夫设备</a>”来减少循环次数。</p>
+</li>
+</ul>
+</li>
+<li><p>条件语句：</p>
+<ul>
+<li>优化if-else，将最可能出现的条件放在首位。</li>
+<li>特殊情况使用”<a href="https://zh.wikipedia.org/wiki/%E6%9F%A5%E6%89%BE%E8%A1%A8" target="_blank" rel="external">查找表</a>“。</li>
+<li>递归的模式与调用栈限制，超出限制时应改为迭代算法。</li>
+</ul>
+</li>
+</ol>
+<h2 id="第五章：字符串和正则表达式"><a href="#第五章：字符串和正则表达式" class="headerlink" title="第五章：字符串和正则表达式"></a>第五章：字符串和正则表达式</h2><ol>
+<li><p>字符串拼接：除了ie7-，大部分浏览器对+ &amp; +=进行了很好的优化，但你还是要避免临时字符串的产生。若是要考虑ie7-，应该使用Array.prototype.join()；</p>
+</li>
+<li><p>正则表达式优化：</p>
+<p>额，这里先占个坑。。</p>
+</li>
+</ol>
+<h2 id="第六章：快速响应的用户界面"><a href="#第六章：快速响应的用户界面" class="headerlink" title="第六章：快速响应的用户界面"></a>第六章：快速响应的用户界面</h2><p>js与用户界面更新在同一个进程中运行，因此同时只能处理一件事情。所以要高效的关系UI线程，确保js不能运行太长的时间。</p>
+<ol>
+<li><p>任何js任务都不能超过100ms，否则会对用户感受到与页面失联。且js运行期间，浏览器响应用户的交互存在差异。</p>
+</li>
+<li><p>可以利用定时器安排代码的延迟执行。</p>
+</li>
+<li><p>web workers允许你在UI线程外部执行js代码。从而避免UI锁定。</p>
+<ul>
+<li><p>每个web worker运行在UI线程的一个子集环境中，拥有部分js脚本的特性。</p>
+<ul>
+<li><code>navigator</code> 对象</li>
+<li><code>location</code> 对象（只读）</li>
+<li><code>XMLHttpRequest</code></li>
+<li><code>setTimeout()/clearTimeout()</code> 和 <code>setInterval()/clearInterval()</code></li>
+<li><a href="http://www.html5rocks.com/tutorials/appcache/beginner/" target="_blank" rel="external">应用缓存</a></li>
+<li>使用 <code>importScripts()</code> 方法导入外部脚本</li>
+<li><a href="http://www.html5rocks.com/zh/tutorials/workers/basics/#toc-enviornment-subworkers" target="_blank" rel="external">生成其他 Web Worker</a></li>
+</ul>
+<p>Worker 无法使用：</p>
+<ul>
+<li>DOM（非线程安全）</li>
+<li><code>window</code> 对象</li>
+<li><code>document</code> 对象</li>
+<li><code>parent</code> 对象</li>
+</ul>
+</li>
+<li><p>实际应用：用web worker解析一个很大的JSON</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> worker = <span class="keyword">new</span> Worker(<span class="string">'xxx.js'</span>)</div><div class="line">worker.onmessage = <span class="function"><span class="keyword">function</span>(<span class="params">event</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> jsonData = event.data</div><div class="line">  <span class="comment">//todo</span></div><div class="line">&#125;</div><div class="line">worker.postMessage(jsonText)</div><div class="line"><span class="comment">//xxx.js</span></div><div class="line">self.onmessage = <span class="function"><span class="keyword">function</span>(<span class="params">event</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> jsonText = event.data</div><div class="line">  <span class="keyword">var</span> jsonData = <span class="built_in">JSON</span>.parse(jsonText)</div><div class="line">  self.postMessage(jsonData)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="第七章：AJAX"><a href="#第七章：AJAX" class="headerlink" title="第七章：AJAX"></a>第七章：AJAX</h2><p>关键在于选择正确的数据格式和与之匹配的传输技术。常见的有html，xml，json，json-p。</p>
+<ol>
+<li>万能的减少请求。做资源打包。</li>
+<li>为缩短白屏时间，主要内容加在完毕后，利用AJAX请求次要资源。lazyload</li>
+</ol>
+<h2 id="第八章：编程实践"><a href="#第八章：编程实践" class="headerlink" title="第八章：编程实践"></a>第八章：编程实践</h2><ol>
+<li><p>避免通过eval()和Function()构造器引发的双重求值带来的性能消耗。同样的，给setTimeout()和setInterval()传递函数而不是字符串作为参数。</p>
+</li>
+<li><p>用直接量创建数组和对象。</p>
+</li>
+<li><p>避免重复的浏览器检测，使用延迟加载或条件预加载。其主要思想是只进行一次环检测。</p>
+<ul>
+<li><p>eg：绑定-移除事件的兼容性代码：</p>
+<p>方法一：重复的写法<strong>（不推荐）</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">addHandler</span>(<span class="params">target, eventType, handler</span>) </span>&#123;  </div><div class="line">	<span class="keyword">if</span> (target.addEventListener) &#123;    </div><div class="line">    	target.addEventListener(eventType, handler, <span class="literal">false</span>)</div><div class="line">    &#125; <span class="keyword">else</span> &#123;    </div><div class="line">      	target.attachEvent(<span class="string">"on"</span>, eventType, handler)  </div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">removeHandler</span>(<span class="params">target, eventType, handler</span>) </span>&#123;</div><div class="line">  	<span class="keyword">if</span> (target.removeEventListener) &#123;    </div><div class="line">      	target.removeEventListener(eventType, handler, <span class="literal">false</span>)</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">      	target.detachEvent(<span class="string">"on"</span>, eventType, handler)  </div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>方法二：延迟加载：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">addHandler</span>(<span class="params">target, eventType, handler</span>) </span>&#123;  </div><div class="line">	<span class="keyword">if</span> (target.addEventListener) &#123;  </div><div class="line">      	addHandler = <span class="function"><span class="keyword">function</span>(<span class="params">target, eventType, handler</span>) </span>&#123;</div><div class="line">    		target.addEventListener(eventType, handler, <span class="literal">false</span>)</div><div class="line">      	&#125;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;    </div><div class="line">      	addHandler = <span class="function"><span class="keyword">function</span>(<span class="params">target, eventType, handler</span>) </span>&#123;</div><div class="line">    		target.attachEvent(<span class="string">"on"</span> + eventType, handler)</div><div class="line">      	&#125;  </div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">removeHandler</span>(<span class="params">target, eventType, handler</span>) </span>&#123;</div><div class="line">  	<span class="keyword">if</span> (target.removeEventListener) &#123;    </div><div class="line">        removeHandler = <span class="function"><span class="keyword">function</span>(<span class="params">target, eventType, handler</span>) </span>&#123;</div><div class="line">    		target.removeEventListener(eventType, handler, <span class="literal">false</span>)</div><div class="line">      	&#125;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">      	removeHandler = <span class="function"><span class="keyword">function</span>(<span class="params">target, eventType, handler</span>) </span>&#123;</div><div class="line">    		target.detachEvent(<span class="string">"on"</span>, eventType, handler) </div><div class="line">      	&#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>方法三：条件预加载：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> addHandler = <span class="built_in">document</span>.body.addEventListener ?</div><div class="line">    			 <span class="function"><span class="keyword">function</span>(<span class="params">target, eventType, handler</span>) </span>&#123;</div><div class="line">    				target.addEventListener(eventType, handler, <span class="literal">false</span>)</div><div class="line">      			 &#125;:</div><div class="line">				 <span class="function"><span class="keyword">function</span>(<span class="params">target, eventType, handler</span>) </span>&#123;</div><div class="line">    				target.attachEvent(<span class="string">"on"</span> + eventType, handler)</div><div class="line">      			 &#125;  </div><div class="line"><span class="keyword">var</span> removeHandler = <span class="built_in">document</span>.body.addEventListener ?</div><div class="line">    			 <span class="function"><span class="keyword">function</span>(<span class="params">target, eventType, handler</span>) </span>&#123;</div><div class="line">    				target.removeEventListener(eventType, handler, <span class="literal">false</span>)</div><div class="line">      			 &#125;:</div><div class="line">				 <span class="function"><span class="keyword">function</span>(<span class="params">target, eventType, handler</span>) </span>&#123;</div><div class="line">    				target.attachEvent(<span class="string">"on"</span> + eventType, handler)</div><div class="line">      			 &#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>数学计算时，考虑直接操作数字的二进制形式的位运算。</p>
+<ul>
+<li><p>eg：判断一个数是奇数还是偶数。按位与运算。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">assert</span>(<span class="params">n</span>) </span>&#123;</div><div class="line">	<span class="keyword">if</span> (n &amp; <span class="number">1</span>) &#123;</div><div class="line">    	<span class="built_in">console</span>.log(n + <span class="string">"是奇数"</span>);</div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line">    	<span class="built_in">console</span>.log(n + <span class="string">"是偶数"</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">assert(<span class="number">3</span>); <span class="comment">// 3是奇数</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>使用原生对象，例如Math对象。</p>
+</li>
+</ol>
+<h2 id="第九章：开发者工具的Timeline面板"><a href="#第九章：开发者工具的Timeline面板" class="headerlink" title="第九章：开发者工具的Timeline面板"></a>第九章：开发者工具的Timeline面板</h2><p>利用chrome开发者工具的Timeline面板监测分析页面性能。写到这里实在太困，所以偷了懒…./w\。</p>
+<p>首先，按下 F12 打开”开发者工具”，切换到Timeline面板。</p>
+<p><img src="./1.png" alt="img"></p>
+<p>左上角有一个灰色的圆点，这是录制按钮，按下它会变成红色。然后，在网页上进行一些操作，再按一次按钮完成录制。</p>
+<p>Timeline面板提供两种查看方式：横条的是”事件模式”（Event Mode），显示重新渲染的各种事件所耗费的时间；竖条的是”帧模式”（Frame Mode），显示每一帧的时间耗费在哪里。</p>
+<p>先看”事件模式”，你可以从中判断，性能问题发生在哪个环节，是JavaScript的执行，还是渲染？</p>
+<p><img src="2.png" alt="img"></p>
+<p>不同的颜色表示不同的事件。</p>
+<p><img src="3.png" alt="img"></p>
+<ul>
+<li>蓝色：网络通信和HTML解析</li>
+<li>黄色：JavaScript执行</li>
+<li>紫色：样式计算和布局，即重排</li>
+<li>绿色：重绘</li>
+</ul>
+<p>哪种色块比较多，就说明性能耗费在那里。色块越长，问题越大。</p>
+<p><img src="4.png" alt="img"></p>
+<p><img src="5.png" alt="img"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>书很好读，一天就读完了。可是性能优化岂是一本书，一天能够讲清楚的。看的同时也借助搜索做了一些扩展，如醍醐灌顶一般。大到页面的渲染过程，css动画优化，小到一个操作符，API。收获很大，之后的代码中也要实践起来。啊，犯困twice……</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><blockquote>
+<p>[1] 阮一峰. <a href="http://www.ruanyifeng.com/blog/2015/09/web-page-performance-in-depth.html" target="_blank" rel="external"><strong>网页性能管理详解</strong></a>[CP/OL].</p>
+</blockquote>
+]]></content>
+    </entry>
+    
+    <entry>
       <title><![CDATA[跨域请求问题总结]]></title>
       <url>http://lany44.github.io/2016/07/31/%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/</url>
       <content type="html"><![CDATA[<p>之前web知乎项目需要从知乎服务器上请求数据，遇到了请求跨域的问题。我将了解到的解决方案做下总结。</p>
