@@ -74,7 +74,7 @@
 
 
 
-  <link rel="alternate" href="/atom.xml" title="lany44" type="application/atom+xml" />
+  <link rel="alternate" href="/atom.xml" title="lany44的笔记本" type="application/atom+xml" />
 
 
 
@@ -87,23 +87,23 @@
 
 
 <meta name="description" content="《高性能javascript》是高程作者的另一力作，终于借了本来读，同时做了篇读书笔记。
-书中一共有十个章节，笔记只包含前八章和开发者工具Timeline面板介绍。">
+书中一共有十个章节，笔记包含了前八章和开发者工具Timeline面板介绍。(￣ー￣〃)">
 <meta property="og:type" content="article">
 <meta property="og:title" content="高性能JavaScript读书笔记">
 <meta property="og:url" content="http://lany44.github.io/2016/08/03/高性能JavaScript读书笔记/index.html">
-<meta property="og:site_name" content="lany44">
+<meta property="og:site_name" content="lany44的笔记本">
 <meta property="og:description" content="《高性能javascript》是高程作者的另一力作，终于借了本来读，同时做了篇读书笔记。
-书中一共有十个章节，笔记只包含前八章和开发者工具Timeline面板介绍。">
+书中一共有十个章节，笔记包含了前八章和开发者工具Timeline面板介绍。(￣ー￣〃)">
 <meta property="og:image" content="http://lany44.github.io/./1.png">
 <meta property="og:image" content="http://lany44.github.io/2.png">
 <meta property="og:image" content="http://lany44.github.io/3.png">
 <meta property="og:image" content="http://lany44.github.io/4.png">
 <meta property="og:image" content="http://lany44.github.io/5.png">
-<meta property="og:updated_time" content="2016-08-03T13:50:46.000Z">
+<meta property="og:updated_time" content="2016-08-06T13:29:01.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="高性能JavaScript读书笔记">
 <meta name="twitter:description" content="《高性能javascript》是高程作者的另一力作，终于借了本来读，同时做了篇读书笔记。
-书中一共有十个章节，笔记只包含前八章和开发者工具Timeline面板介绍。">
+书中一共有十个章节，笔记包含了前八章和开发者工具Timeline面板介绍。(￣ー￣〃)">
 <meta name="twitter:image" content="http://lany44.github.io/./1.png">
 
 
@@ -122,7 +122,7 @@
   };
 </script>
 
-  <title> 高性能JavaScript读书笔记 | lany44 </title>
+  <title> 高性能JavaScript读书笔记 | lany44的笔记本 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -163,7 +163,7 @@
   <div class="custom-logo-site-title">
     <a href="/"  class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
-      <span class="site-title">lany44</span>
+      <span class="site-title">lany44的笔记本</span>
       <span class="logo-line-after"><i></i></span>
     </a>
   </div>
@@ -195,22 +195,22 @@
         </li>
       
         
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-categories">
           <a href="/categories" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
             
             分类
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-about">
-          <a href="/about" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
-            
-            关于
           </a>
         </li>
       
@@ -225,12 +225,12 @@
         </li>
       
         
-        <li class="menu-item menu-item-tags">
-          <a href="/tags" rel="section">
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
             
-            标签
+            关于
           </a>
         </li>
       
@@ -362,7 +362,7 @@
 
       
         <p>《高性能javascript》是高程作者的另一力作，终于借了本来读，同时做了篇读书笔记。</p>
-<p>书中一共有十个章节，笔记只包含前八章和开发者工具Timeline面板介绍。</p>
+<p>书中一共有十个章节，笔记包含了前八章和开发者工具Timeline面板介绍。(￣ー￣〃)</p>
 <a id="more"></a>
 <h2 id="第一章：加载与执行"><a href="#第一章：加载与执行" class="headerlink" title="第一章：加载与执行"></a>第一章：加载与执行</h2><ol>
 <li><code>&lt;script&gt;</code>标签放在body底部，确保脚本执行时页面完成渲染。</li>
@@ -413,49 +413,42 @@
 <p>这样修改只会引起一次重排，更为高效。</p>
 <p>还有一种做法就是为想要修改的部分添加一个<code>class</code>使用css一次性修改。</p>
 </li>
+<li><p><strong>批量修改DOM时：</strong></p>
+<p>如果我们需要对DOM进行一系列操作的时候，可以通过下面的做法来减少重绘和重排：</p>
+<ol>
+<li><p>使元素脱离文档流。</p>
+</li>
+<li><p>对其进行操作。</p>
+<ol>
+<li>把元素带回文档中。</li>
+</ol>
+<p>这样如果我们在第二步进行多次操作时，也只会在第一步和第三步触发两次重排。</p>
+<p>有三种基本方法可以使DOM脱离文档流:</p>
+<ol>
+<li>隐藏元素，修改，重新显示。</li>
+<li>使用文档片断（document fragment），在当前DOM外构建一个子树，再把它插入文档中。</li>
+<li>把原始元素拷贝到脱离文档的节点中，修改后在把原始元素替换掉。</li>
+</ol>
+<p>用代码来说明三种方法：</p>
+<p>比如现在我们有一个<code>ul</code>列表，我们用一个方法<code>appendDataElement()</code>往列表中添加<code>li</code>。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//要操作的列表</span></div><div class="line"><span class="keyword">var</span> ul = <span class="built_in">document</span>.getElementById(<span class="string">'mylist'</span>);</div><div class="line"><span class="comment">//向列表中添加li，data是li中的内容</span></div><div class="line">appendDataToElement(ul, data);</div></pre></td></tr></table></figure>
+<p>如果我们不使用任何方法的话，每插入一个<code>li</code>就会触发一次重排，这样是很影响性能的。所以我们可以使用上面的三种方法。</p>
+<p>方法一：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> ul = <span class="built_in">document</span>.getElementById(<span class="string">'mylist'</span>);</div><div class="line">ul.style.display = <span class="string">'none'</span>; </div><div class="line">appendDataToElement(ul, data);</div><div class="line">ul.style.display = <span class="string">'block'</span>;</div></pre></td></tr></table></figure>
+<p> <strong>方法二：（推荐）</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fragment = <span class="built_in">document</span>.createDocumentFragment();</div><div class="line">appendDataToElement(fragment, data);</div><div class="line"><span class="built_in">document</span>.getElementById(<span class="string">'mylist'</span>).appendChild(fragment);</div></pre></td></tr></table></figure>
+<p>方法三：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> old = <span class="built_in">document</span>.getElementById(<span class="string">'mylist'</span>); </div><div class="line"><span class="keyword">var</span> clone = old.cloneNode(<span class="literal">true</span>);</div><div class="line">appendDataToElement(clone, data);</div><div class="line">old.parentNode.replaceChild(clone, old);</div></pre></td></tr></table></figure>
+<p>文章中是推荐我们使用第二种方法，因为这种方法本来设计的初衷就是为了解决这类任务的（更新和移动节点）。而且这种方法只触发一次重拍，只访问一次DOM节点。</p>
+</li>
+</ol>
+</li>
 </ul>
 </li>
 </ul>
 </li>
 </ol>
-<pre><code>- **批量修改DOM时：**
-
-  如果我们需要对DOM进行一系列操作的时候，可以通过下面的做法来减少重绘和重排：
-
-  1. 使元素脱离文档流。
-  2. 对其进行操作。
-  3. 把元素带回文档中。
-
-  这样如果我们在第二步进行多次操作时，也只会在第一步和第三步触发两次重排。
-
-  有三种基本方法可以使DOM脱离文档流:
-
-  1. 隐藏元素，修改，重新显示。
-  2. 使用文档片断（document fragment），在当前DOM外构建一个子树，再把它插入文档中。
-  3. 把原始元素拷贝到脱离文档的节点中，修改后在把原始元素替换掉。
-
-  用代码来说明三种方法：
-
-  比如现在我们有一个`ul`列表，我们用一个方法`appendDataElement()`往列表中添加`li`。
-
-  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//要操作的列表</span></div><div class="line"><span class="keyword">var</span> ul = <span class="built_in">document</span>.getElementById(<span class="string">'mylist'</span>);</div><div class="line"><span class="comment">//向列表中添加li，data是li中的内容</span></div><div class="line">appendDataToElement(ul, data);</div></pre></td></tr></table></figure>
-
-  如果我们不使用任何方法的话，每插入一个`li`就会触发一次重排，这样是很影响性能的。所以我们可以使用上面的三种方法。
-
-  方法一：
-
-  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> ul = <span class="built_in">document</span>.getElementById(<span class="string">'mylist'</span>);</div><div class="line">ul.style.display = <span class="string">'none'</span>; </div><div class="line">appendDataToElement(ul, data);</div><div class="line">ul.style.display = <span class="string">'block'</span>;</div></pre></td></tr></table></figure>
-
-  **方法二：（推荐）**
-
-  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fragment = <span class="built_in">document</span>.createDocumentFragment();</div><div class="line">appendDataToElement(fragment, data);</div><div class="line"><span class="built_in">document</span>.getElementById(<span class="string">'mylist'</span>).appendChild(fragment);</div></pre></td></tr></table></figure>
-
-  方法三：
-
-  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> old = <span class="built_in">document</span>.getElementById(<span class="string">'mylist'</span>); </div><div class="line"><span class="keyword">var</span> clone = old.cloneNode(<span class="literal">true</span>);</div><div class="line">appendDataToElement(clone, data);</div><div class="line">old.parentNode.replaceChild(clone, old);</div></pre></td></tr></table></figure>
-
-  文章中是推荐我们使用第二种方法，因为这种方法本来设计的初衷就是为了解决这类任务的（更新和移动节点）。而且这种方法只触发一次重拍，只访问一次DOM节点
-</code></pre><h2 id="第四章：算法与流程控制"><a href="#第四章：算法与流程控制" class="headerlink" title="第四章：算法与流程控制"></a>第四章：算法与流程控制</h2><ol>
+<h2 id="第四章：算法与流程控制"><a href="#第四章：算法与流程控制" class="headerlink" title="第四章：算法与流程控制"></a>第四章：算法与流程控制</h2><ol>
 <li><p>循环：</p>
 <ul>
 <li><p>只有for-in慢于其他循环类型。第一步应减少数组属性的查询次数（见第二章），第二步采用倒序循环，让控制条件与0比较。非0会转化为true，0会变成false。</p>
@@ -604,6 +597,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2016/08/05/面向对象or行为委托/" rel="prev" title="面向对象or行为委托">
+                面向对象or行为委托 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -700,7 +697,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-count">4</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

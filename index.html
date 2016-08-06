@@ -74,7 +74,7 @@
 
 
 
-  <link rel="alternate" href="/atom.xml" title="lany44" type="application/atom+xml" />
+  <link rel="alternate" href="/atom.xml" title="lany44的笔记本" type="application/atom+xml" />
 
 
 
@@ -87,11 +87,11 @@
 
 
 <meta property="og:type" content="website">
-<meta property="og:title" content="lany44">
+<meta property="og:title" content="lany44的笔记本">
 <meta property="og:url" content="http://lany44.github.io/index.html">
-<meta property="og:site_name" content="lany44">
+<meta property="og:site_name" content="lany44的笔记本">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="lany44">
+<meta name="twitter:title" content="lany44的笔记本">
 
 
 
@@ -109,7 +109,7 @@
   };
 </script>
 
-  <title> lany44 </title>
+  <title> lany44的笔记本 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -152,7 +152,7 @@
   <div class="custom-logo-site-title">
     <a href="/"  class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
-      <span class="site-title">lany44</span>
+      <span class="site-title">lany44的笔记本</span>
       <span class="logo-line-after"><i></i></span>
     </a>
   </div>
@@ -184,22 +184,22 @@
         </li>
       
         
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-categories">
           <a href="/categories" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
             
             分类
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-about">
-          <a href="/about" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
-            
-            关于
           </a>
         </li>
       
@@ -214,12 +214,12 @@
         </li>
       
         
-        <li class="menu-item menu-item-tags">
-          <a href="/tags" rel="section">
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
             
-            标签
+            关于
           </a>
         </li>
       
@@ -263,6 +263,129 @@
           <div id="content" class="content">
             
   <section id="posts" class="posts-expand">
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/08/05/面向对象or行为委托/" itemprop="url">
+                  面向对象or行为委托
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-05T23:12:41+08:00" content="2016-08-05">
+              2016-08-05
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/技术日记/" itemprop="url" rel="index">
+                    <span itemprop="name">技术日记</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/05/面向对象or行为委托/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/05/面向对象or行为委托/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>JavaScript是基于原型的语言，严格来说并没有真正面向对象。用面向对象思想编写JS代码时，总会遇到各种各样的坑。虽然es6提供class等语法糖改善了这一尴尬，但类是唯一的代码组织方式吗？nono</p>
+<p>行为委托是一种少见但同样强大的设计模式。行为委托中认为对象之间是兄弟关系，相互委托，而不是父类和子类的关系。JavaScript的 <strong>[[Prototype]]</strong> 机制本身就是行为委托机制。你可以选择在JavaScript中努力实现类机制，也可以拥抱更自然的 <strong>[[Prototype]]</strong> 委托机制。</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/08/05/面向对象or行为委托/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
     
       
 
@@ -355,7 +478,7 @@
       
         
           <p>《高性能javascript》是高程作者的另一力作，终于借了本来读，同时做了篇读书笔记。</p>
-<p>书中一共有十个章节，笔记只包含前八章和开发者工具Timeline面板介绍。</p>
+<p>书中一共有十个章节，笔记包含了前八章和开发者工具Timeline面板介绍。(￣ー￣〃)</p>
           <div class="post-more-link text-center">
             <a class="btn" href="/2016/08/03/高性能JavaScript读书笔记/#more" rel="contents">
               阅读全文 &raquo;
@@ -531,7 +654,7 @@
               
                 
                 <a class="post-title-link" href="/2016/07/24/vue+vue-router实现的知乎日报/" itemprop="url">
-                  项目总结——vue+vue-router实现知乎日报
+                  项目总结——Vue+Vue-Router实现知乎日报
                 </a>
               
             
@@ -672,7 +795,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-count">4</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
