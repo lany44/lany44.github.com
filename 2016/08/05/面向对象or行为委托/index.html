@@ -94,14 +94,14 @@
 <meta property="og:site_name" content="lany44的笔记本">
 <meta property="og:description" content="JavaScript是基于原型的语言，严格来说并没有真正面向对象。用面向对象思想编写JS代码时，总会遇到各种各样的坑。虽然es6提供class等语法糖改善了这一尴尬，但类是唯一的代码组织方式吗？nono
 行为委托是一种少见但同样强大的设计模式。行为委托中认为对象之间是兄弟关系，相互委托，而不是父类和子类的关系。JavaScript的 [[Prototype]] 机制本身就是行为委托机制。你可以选择">
-<meta property="og:image" content="http://lany44.github.io/1.png">
-<meta property="og:image" content="http://lany44.github.io/2.png">
-<meta property="og:updated_time" content="2016-08-06T13:18:57.000Z">
+<meta property="og:image" content="http://lany44.github.io/./1.png">
+<meta property="og:image" content="http://lany44.github.io/./2.png">
+<meta property="og:updated_time" content="2016-08-06T14:10:04.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="面向对象or行为委托">
 <meta name="twitter:description" content="JavaScript是基于原型的语言，严格来说并没有真正面向对象。用面向对象思想编写JS代码时，总会遇到各种各样的坑。虽然es6提供class等语法糖改善了这一尴尬，但类是唯一的代码组织方式吗？nono
 行为委托是一种少见但同样强大的设计模式。行为委托中认为对象之间是兄弟关系，相互委托，而不是父类和子类的关系。JavaScript的 [[Prototype]] 机制本身就是行为委托机制。你可以选择">
-<meta name="twitter:image" content="http://lany44.github.io/1.png">
+<meta name="twitter:image" content="http://lany44.github.io/./1.png">
 
 
 
@@ -370,9 +370,9 @@
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">Foo = &#123;</div><div class="line">  init(who) &#123;</div><div class="line">    <span class="keyword">this</span>.me = who</div><div class="line">  &#125;,</div><div class="line">  identify() &#123;</div><div class="line">    <span class="keyword">return</span> <span class="string">"I am "</span> + <span class="keyword">this</span>.me</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">Bar = <span class="built_in">Object</span>.create(Foo)</div><div class="line">Bar.speak = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  alert(<span class="string">"Hellow, "</span> + <span class="keyword">this</span>.identify() + <span class="string">"."</span>)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> b1 = <span class="built_in">Object</span>.create(Bar)</div><div class="line">b1.init( <span class="string">"b1"</span> )</div><div class="line"><span class="keyword">var</span> b2 = <span class="built_in">Object</span>.create(Bar)</div><div class="line">b2.init( <span class="string">"b2"</span> )</div><div class="line"></div><div class="line">Foo.isPrototypeof( b1 )<span class="comment">//true</span></div><div class="line">Bar.isPrototypeof( b1 )<span class="comment">//true     b1:Bar，你是我的的原型吗/w\</span></div><div class="line"></div><div class="line">b1.speak()</div><div class="line">b2.speak()</div></pre></td></tr></table></figure>
 <p>同样利用 <strong>[[Prototype]]</strong> 把b1委托给Bar，把Bar委托给Foo。实现了3个对象的关联，且不需要模仿类的行为：构造函数，原型以及new。</p>
 <h2 id="思维模型"><a href="#思维模型" class="headerlink" title="思维模型"></a>思维模型</h2><p>类风格代码的思维模型：</p>
-<p><img src="/1.png" alt=""></p>
+<p><img src="./1.png" alt=""></p>
 <p>对象关联风格代码的思维模型：</p>
-<p><img src="/2.png" alt=""></p>
+<p><img src="./2.png" alt=""></p>
 <p>抛弃.prototype  构造函数与 new  。我们只是顺应了JavaScript底层的对象原型机制。</p>
 <h2 id="更复杂的场景"><a href="#更复杂的场景" class="headerlink" title="更复杂的场景"></a>更复杂的场景</h2><h3 id="需求："><a href="#需求：" class="headerlink" title="需求："></a>需求：</h3><p>这里我们需要2个控制器对象</p>
 <ul>
@@ -407,7 +407,7 @@
 <p>我们没有在2个对象中定义相同的方法名success(…)，failure(…)，相反的我们定义了更具描述性的方法名accepted(…)、rejected(…)。这正是委托思想中提倡的。同时还提倡尽量避免使用显式伪多态调用（ xxx.prototype.x.call() ）,代之以this.xxx()。</p>
 <p>最重要的是我们避免了面向对象中的多态。因为我们没有在不同的对象中使用相同的函数名success(…)和failure(…)。所以不需要使用显式伪多态。</p>
 <h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>这两天读<strong>You Don’t Know JS</strong>入迷了，特别是最后面向对象和行为委托这两章特别来电。作者对JS有独到的理解，中文翻译也超好，绝对是一本必读。自己也试着去看了github上的原版，真的羡慕能流畅阅读的强者们。(￣ー￣〃)</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考:"></a>参考:</h2><blockquote>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><blockquote>
 <p>[1] Kyle Simpson. <strong>You Don’t Know JS: this &amp; Object Prototype</strong>[M]. 赵望野 译.</p>
 <p>[2] Nicholas C.Zakas. <strong>Professional JavaScript for Web Developers</strong>[M]. 3rd Edition. 李松峰，曹力 译.</p>
 <p>[3] 阮一峰. <strong>ES6标准入门</strong>[M]. 第2版</p>
@@ -628,7 +628,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#代码风格"><span class="nav-number">1.</span> <span class="nav-text">代码风格</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#思维模型"><span class="nav-number">2.</span> <span class="nav-text">思维模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更复杂的场景"><span class="nav-number">3.</span> <span class="nav-text">更复杂的场景</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#需求："><span class="nav-number">3.1.</span> <span class="nav-text">需求：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#面向对象写法：es5"><span class="nav-number">3.2.</span> <span class="nav-text">面向对象写法：es5</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#面向对象写法：es6"><span class="nav-number">3.3.</span> <span class="nav-text">面向对象写法：es6</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#行为委托写法："><span class="nav-number">3.4.</span> <span class="nav-text">行为委托写法：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最后"><span class="nav-number">4.</span> <span class="nav-text">最后</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">5.</span> <span class="nav-text">参考:</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#代码风格"><span class="nav-number">1.</span> <span class="nav-text">代码风格</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#思维模型"><span class="nav-number">2.</span> <span class="nav-text">思维模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更复杂的场景"><span class="nav-number">3.</span> <span class="nav-text">更复杂的场景</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#需求："><span class="nav-number">3.1.</span> <span class="nav-text">需求：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#面向对象写法：es5"><span class="nav-number">3.2.</span> <span class="nav-text">面向对象写法：es5</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#面向对象写法：es6"><span class="nav-number">3.3.</span> <span class="nav-text">面向对象写法：es6</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#行为委托写法："><span class="nav-number">3.4.</span> <span class="nav-text">行为委托写法：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最后"><span class="nav-number">4.</span> <span class="nav-text">最后</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
           </div>
         </section>
