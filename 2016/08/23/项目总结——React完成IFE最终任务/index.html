@@ -13,11 +13,11 @@
 
     <title>
         
-          项目总结——Vue+Vue-Router实现知乎日报 - lany44的笔记
+          项目总结——React完成IFE最终任务 - lany44的笔记
         
     </title>
 
-    <link rel="canonical" href="https://lany44.github.io/2016/07/24/vue+vue-router实现的知乎日报/">
+    <link rel="canonical" href="https://lany44.github.io/2016/08/23/项目总结——React完成IFE最终任务/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -155,7 +155,7 @@
 <!-- Post Header -->
 <style type="text/css">
     header.intro-header{
-        background-image: url('/img/header-img.jpg')
+        background-image: url('header-img1.jpg')
     }
 </style>
 <header class="intro-header" >
@@ -165,14 +165,14 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                          <a class="tag" href="/tags/#Vue" title="Vue">Vue</a>
+                          <a class="tag" href="/tags/#React" title="React">React</a>
                         
                     </div>
-                    <h1>项目总结——Vue+Vue-Router实现知乎日报</h1>
+                    <h1>项目总结——React完成IFE最终任务</h1>
                     <h2 class="subheading"></h2>
                     <span class="meta">
                         Posted by lany44 on
-                        2016-07-24
+                        2016-08-23
                     </span>
                 </div>
             </div>
@@ -191,66 +191,109 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><p>大约一周前喻导从掘金vue版块看到一个vue实现知乎日报的项目，然后顺手又一次向我使出大安利术。终于在他煽动下，我大概看了下前辈项目的源码（我去，我竟然能看懂），之后一边看文档一边自己也试着实现了出来。因为之前一直在学习React生态圈相关，对component，container，state，生命周期等概念有了理解，加上vue本身的易用原则，文档又写的详细易懂。所以总体下来自己在一边感叹vue API优美的同时（<em>跟风</em>），也写的很爽。</p>
-<a id="more"></a>
-<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><blockquote>
-<p><em>接口跨域没能提供在线版本，打算用node写个server去get数据</em>  </p>
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>3月份的时候拉着寝室长还有室友－隐形君X组了个团去参加百度ife前端学院，一边充电，一边努力完成任务。一路上由于大家水平相差太多，所以各自为战。结束时自己也只完成到第三阶段。过程中自己也坚定了前端这条道路。由衷的感谢百度EFE团队。<br>IFE结束了，但那最终任务就像个妖艳的xx一样，一直挥之不去，终于自己在暑假废了些心思把她拿下了。/w\</p>
+<p><a href="http://ife.baidu.com/task/detail?taskId=50" target="_blank" rel="external">任务要求</a><br><a href="https://github.com/lany44/2016_ife_4-1" target="_blank" rel="external">源码</a>     <a href="http://lany44.com/2016_ife_4-1/build/" target="_blank" rel="external">在线demo</a></p>
+<p>项目历时2周，参考第一名颜适的设计和部分实现。使用React将任务做成了SPA。完成后发现依然有很多可以优化的地方，但自己懒癌发作，打算就此搁置。</p>
+<h2 id="技术体系"><a href="#技术体系" class="headerlink" title="技术体系"></a>技术体系</h2><ul>
+<li>JavaScript: <a href="http://facebook.github.io/react/" target="_blank" rel="external">React</a> + <a href="http://redux.js.org/" target="_blank" rel="external">Redux</a> + <a href="https://github.com/reactjs/react-router" target="_blank" rel="external">React-Router</a></li>
+<li>CSS: <a href="https://github.com/css-modules/css-modules" target="_blank" rel="external">CSS-Modules</a> + <a href="http://sass-lang.com/" target="_blank" rel="external">Sass</a> + <a href="http://postcss.org/" target="_blank" rel="external">PostCSS</a></li>
+<li>Graph: <a href="http://recharts.org/" target="_blank" rel="external">Recharts</a></li>
+<li>Build: <a href="https://www.npmjs.com/" target="_blank" rel="external">NPM</a> + <a href="https://babeljs.io/" target="_blank" rel="external">Babel</a> + <a href="https://webpack.github.io/" target="_blank" rel="external">Webpack</a></li>
+</ul>
+<p>js方面拥抱ES6，且采用了React技术栈，用Redux维护分发state，用React-Router做页内跳转。</p>
+<p>css使用Sass＋PostCSS做buff，用 CSS-Modules解决模块化。</p>
+<p>可视化参考第一名简单使用了Recharts。</p>
+<p>不了解React的同学还是先去读文档吧</p>
+<h2 id="State"><a href="#State" class="headerlink" title="State"></a>State</h2><p>用editing中间态做缓冲，提交时推入list并存于localStorage。</p>
+<ul>
+<li>questionnaires包含了问卷系统的主要信息。<ul>
+<li>list是记录每张问卷信息的数组，存于localStorage。<ul>
+<li>title为问卷标题。</li>
+<li>deadline为问卷截止时间。</li>
+<li>status为问卷当前状态。</li>
+<li>questions是记录每个问题信息的数组。<ul>
+<li>type为问题类型。</li>
+<li>content为选择题的标题，或者文本题的问题内容。</li>
+<li>若为选择题，则有options记录每个选项的内容。</li>
+<li>若为文本题，则有isRequired记录该题是否必填。</li>
+</ul>
+</li>
+<li>data为记录当前问卷所有数据的二维数组，第一维表示问卷填写数据的序号，第二维表示问题的序号。</li>
+</ul>
+</li>
+<li>editing记录了编辑时的中间状态。<ul>
+<li>id为当前编辑问卷的序号。</li>
+<li>question标记title，可编辑时title作为－1个问题。</li>
+<li>title为当前编辑问卷的标题。</li>
+<li>deadline为当前编辑问卷的截止时间。</li>
+<li>questions是记录当前编辑问卷的问题信息的数组，结构同上。</li>
+<li>data记录填写中的问卷的数据，结构同上。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>dialog, calendar略。</li>
+</ul>
+<h2 id="Containers"><a href="#Containers" class="headerlink" title="Containers"></a>Containers</h2><p>App包含以下页面</p>
+<ul>
+<li><p>Home（首页）</p>
+</li>
+<li><p>Edit（编辑问卷页）</p>
+</li>
+<li><p>Fill（填写问卷页）</p>
+</li>
+<li><p>Check（查看数据页）</p>
+</li>
+</ul>
+<h2 id="CSS-amp-CSS-Modules"><a href="#CSS-amp-CSS-Modules" class="headerlink" title="CSS &amp; CSS Modules"></a>CSS &amp; CSS Modules</h2><p>App用了很多CSS3特性，包括</p>
+<ul>
+<li>flex</li>
+<li>calc</li>
+<li>transform</li>
+<li>animation</li>
+<li>linear-gradient</li>
+<li>box-shadow</li>
+<li>text-shadow</li>
+</ul>
+<p>使用 JS 来管理样式依赖。CSS Modules你的CSS模块化解决方案。/w\</p>
+<p>写起来就跟vue的单文件模版一样爽快，详细可以看这篇<a href="https://zhuanlan.zhihu.com/p/20495964" target="_blank" rel="external">文章</a>。</p>
+<h2 id="Components"><a href="#Components" class="headerlink" title="Components"></a>Components</h2><p>简单介绍下自己写的组件。</p>
+<ul>
+<li><p><strong>Table，Column，SortTableTh</strong> — 表格三剑客</p>
+<p><strong>安  利</strong>  下面这篇文章  ↓ ↓ ↓  </p>
+<p>详细请看<a href="https://zhuanlan.zhihu.com/p/20848369?refer=purerender" target="_blank" rel="external">React 实现 Table 的思考</a>，相当有深度 。【强～/w\</p>
+</li>
+<li><p><strong>Dialog</strong></p>
+<p>Dialog逻辑并不复杂，props接收一个dialog对象包括弹窗的必要信息{ title, info, onConfirm, onCancel }其中2个回调函数为可选参数。由于dialog内容是可变的，所以交给了reducer维护，但每次dialog发生变化时候会更新页内所有Dialog的props。虽然只会有必要那只会显示。。。非常的蠢TAT。</p>
+</li>
+<li><p><strong>EditBox</strong></p>
+<p>EditBox接收保存输入的Action－saveText，并且依靠question，option两个props来标记自己位置。</p>
+<p>每个EditBox各自维护着自己当前的显示状态，输入还是展示。</p>
+<p>主要是复用的很舒服，所以贴了出来。【组件化滴好啊/w\</p>
+</li>
+<li><p><strong>Calendar</strong></p>
+<p>日历的是耗时最久的地方，最终还是参考了手边微博送的RN的书上的日历逻辑，比较巧妙。</p>
+<p>摘了段代码，有兴趣的跟着走一遍吧。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">renderByDay() &#123;</div><div class="line">  <span class="keyword">const</span> &#123; startTime, selectedDay &#125; = <span class="keyword">this</span>.props.calendar<span class="comment">//startTime是渲染月份的一天</span></div><div class="line">  <span class="keyword">var</span> dateNow = <span class="keyword">new</span> <span class="built_in">Date</span>()</div><div class="line">  <span class="keyword">var</span> endOfMonth = <span class="keyword">new</span> <span class="built_in">Date</span>(startTime.getFullYear(), startTime.getMonth()+<span class="number">1</span>, <span class="number">0</span>)<span class="comment">//月末那天</span></div><div class="line">  <span class="keyword">var</span> firstDaysWeek = <span class="keyword">new</span> <span class="built_in">Date</span>(startTime.getFullYear(), startTime.getMonth(), <span class="number">1</span>).getDay()<span class="comment">//1号星期几</span></div><div class="line">  firstDaysWeek = firstDaysWeek == <span class="number">0</span> ? <span class="number">7</span> : firstDaysWeek</div><div class="line">  <span class="keyword">var</span> counts = endOfMonth.getDate()<span class="comment">//天数</span></div><div class="line">  <span class="keyword">var</span> rowCounts = <span class="built_in">Math</span>.ceil((counts + firstDaysWeek - <span class="number">1</span>) / <span class="number">7</span>)<span class="comment">//行数</span></div><div class="line">  <span class="keyword">var</span> rows = []</div><div class="line">  <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>; i&lt;rowCounts; i++) &#123;<span class="comment">//渲染行</span></div><div class="line">    <span class="keyword">var</span> days = []</div><div class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> j=(i*<span class="number">7</span>)+<span class="number">1</span>; j&lt;((i+<span class="number">1</span>)*<span class="number">7</span>)+<span class="number">1</span>; j++) &#123;<span class="comment">//渲染每一天</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>还有地方可以抽象成Stateless Components，但我偷懒了直接复制粘贴了。/w\</p>
+<h2 id="Actions-Reducers"><a href="#Actions-Reducers" class="headerlink" title="Actions + Reducers"></a>Actions + Reducers</h2><p>看懂redux后，状态转移这部分毫无难度的，纯粹就是堆砌代码了。</p>
+<p>用<a href="https://github.com/acdlite/redux-actions" target="_blank" rel="external">redux-actions</a>做了简化。<em>真的有简化吗。。。</em></p>
+<p>redux入门可以看<a href="https://github.com/lewis617/react-redux-tutorial" target="_blank" rel="external"><strong>react-redux-tutorial</strong></a>       (￣ー￣〃)</p>
+<h2 id="webpack"><a href="#webpack" class="headerlink" title="webpack"></a>webpack</h2><p>参考tj大神的<a href="https://github.com/tj/frontend-boilerplate" target="_blank" rel="external">frontend-boilerplate</a>构建项目后发现打包很慢。</p>
+<p>直到看到<a href="http://engineering.invisionapp.com/post/optimizing-webpack/" target="_blank" rel="external">这篇文章</a>，接下来打算翻译之。<em>Flag立起  (￣ー￣〃)</em></p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><ul>
+<li><p>再次感谢百度IFE和背后的EFE团队，已经成功安利身边不少小伙伴了。</p>
+</li>
+<li><p>然后还要感谢这次的优秀学员颜适，沿着他的步伐少走了不少弯路。</p>
+</li>
+</ul>
+<p>犯困…想到什么再来补吧  </p>
+<h2 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h2><blockquote>
+<p>[1] xile611. <strong>React 实现 Table 的思考</strong>[CP/OL].</p>
+<p>[2] camsong. <strong>CSS Modules 详解及 React 中实践</strong>[CP/OL].</p>
 </blockquote>
-<p><a href="https://github.com/lany44/zhihu-daliy-vue" target="_blank" rel="external">项目源码</a></p>
-<p><img src="./zhihu.gif" alt=""></p>
-<p>项目历时一周，因为暑假自己留校学习，基本没有受到干扰，除了吃饭睡觉都在码代码。</p>
-<p>开发环境也从windows过度到了OS X。          ——<em>(ง •_•)ง</em>  </p>
-<h2 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h2><ul>
-<li>JavaScript: Vue + Vue-Router + Swiper + Fastclick</li>
-<li>Css: Sass + PostCSS</li>
-<li>build: Npm + Vue-cli  [Webpack]</li>
-</ul>
-<h2 id="Vue-Vue-Router-Abstract"><a href="#Vue-Vue-Router-Abstract" class="headerlink" title="Vue + Vue-Router Abstract"></a>Vue + Vue-Router Abstract</h2><p>这里简单介绍vue + vue-router ，不想看就跳过吧。</p>
-<h3 id="Vue"><a href="#Vue" class="headerlink" title="Vue"></a>Vue</h3><p>Vue是种“轻 巧”的<a href="http://www.ruanyifeng.com/blog/2015/02/mvcmvp_mvvm.html" target="_blank" rel="external">MVVM</a>前端框架，<em>(目前官网的版本是1.0.x)</em>  其中ViewModel层由vue提供。在vue中我们通过具有特殊前缀的HTML 属性来实现数据绑定，也可以使用常见的花括号模板插值，或是在表单元素上使用v-model双向绑定。</p>
-<p>Vue组件可以理解为预先定义好了行为的ViewModel类。一个组件内可以预定义很多选项，<a href="http://cn.vuejs.org/api/#选项-数据" target="_blank" rel="external">官方文档</a>中有详细的列举，除了基本的template，props，data，methods外，还有组件生命周期不同阶段调用的hook函数，自定义事件events等选项可以配置。</p>
-<p><a href="http://cn.vuejs.org/guide/components.html#父子组件通信" target="_blank" rel="external">组件间通信</a>也是非常重要的一环，父－&gt;子可以通过props传值，或配置ref来拿到子组件。或者自定义events后，父组件里v-on绑定事件给子组件，子组件调用$despatch()触发相应事件。由于绑定和触发的代码是分散在各个组件中，所以当组件间的通信复杂起来时，你需要<a href="http://vuex.vuejs.org/zh-cn/intro.html" target="_blank" rel="external">vuex</a>将容器中的状态存储在顶层中来进行管理分发。</p>
-<p>那么，如何利用它进行组件化开发呢？Webpack + 官方提供的vue-loader 直接搞.vue单文件格式来书写Vue组件，通过vue-devtools调试。另外安装对应的Webpack loader后template里还支持方言呢。    <em>个人感觉模版语法之与React的jsx语法还是模版写起来更明确些。</em></p>
-<p>同时官方提供了Vue-cli这简单粗暴的东西帮你构建项目模版。        <em>搞起来就是贼快。</em></p>
-<p>此外还有，<a href="http://jiongks.name/blog/announcing-vue-2/" target="_blank" rel="external">令人期待的Vue 2.0</a>。</p>
-<h3 id="Vue-Router"><a href="#Vue-Router" class="headerlink" title="Vue-Router"></a>Vue-Router</h3><p><a href="http://router.vuejs.org/zh-cn/index.html" target="_blank" rel="external">Vue-Router</a>是Vue官方提供的路由器。用来帮助Vue项目构筑路由系统。使用router.map()配置app中的路径后，除了使用实例方法外进行切换外，使用在组件上配置v-link=””进行跳转。vue-router将路由跳转的过程细分，用户可以通过配置容器组件中route项调用跳转过程中不同阶段的hook函数，以此来在切换过程中做其他事情，比如请求数据，调用methods什么的。</p>
-<h2 id="Views"><a href="#Views" class="headerlink" title="Views"></a>Views</h2><p>项目包含以下页面：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">router.map(&#123;</div><div class="line">  <span class="string">'/'</span>: &#123;</div><div class="line">    component: list,</div><div class="line">    subRoutes: &#123;</div><div class="line">      <span class="string">'/'</span>: &#123;<span class="comment">//初始的list页</span></div><div class="line">        component: mainDefault</div><div class="line">      &#125;,</div><div class="line">      <span class="string">'/theme/:id'</span>: &#123;<span class="comment">//侧边sidebar进入的主题详情页</span></div><div class="line">        name: <span class="string">'theme'</span>,</div><div class="line">        component: mainTheme</div><div class="line">      &#125;,</div><div class="line">    &#125;</div><div class="line">  &#125;,</div><div class="line">  <span class="string">'/detail/:id'</span>: &#123;<span class="comment">//内容详情页</span></div><div class="line">    name: <span class="string">'detail'</span>,</div><div class="line">    component: detail</div><div class="line">  &#125;,</div><div class="line">  <span class="string">'/comments'</span>: &#123;<span class="comment">//评论详情页</span></div><div class="line">    component: comments</div><div class="line">  &#125;,</div><div class="line">  <span class="string">'/recommenders'</span>: &#123;<span class="comment">//内容推荐者页</span></div><div class="line">    component: recommenders</div><div class="line">  &#125;,</div><div class="line">  <span class="string">'/section'</span>: &#123;<span class="comment">//内容所属栏目汇总页</span></div><div class="line">    component: section</div><div class="line">  &#125;,</div><div class="line">  <span class="string">'/lany44'</span>: &#123;<span class="comment">//个人简介，用来顺便求职前端实习。 orz</span></div><div class="line">    component: lany44</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-<p>部分实现：</p>
-<ul>
-<li>初始列表的动态加载以及列表重定位到上次浏览的地方。这部分代码写在main-default和detail组件中。通过路由系统的钩子函数，在激活阶段调用data()函数向windows绑定添加列表和修改顶部日期的事件，并判断当前url的name。将当前的scrollTop存在sessionStorage中，在detail的跳转中重定位列表的scrollTop。</li>
-</ul>
-<ul>
-<li>GET请求部分没有使用Vue-Resource而使用了<a href="https://github.com/camsong/blog/issues/2?hmsr=toutiao.io&amp;utm_medium=toutiao.io&amp;utm_source=toutiao.io" target="_blank" rel="external">fetch()</a>，开始是听说它可以帮我解决跨域的问题，似懂非懂的用了起来，结果失败了。fetch遵循CORS规范。本地开发阶段用chrome插件Allow-Control-Allow-Origin拿到了数据。        <em>orz</em></li>
-<li>主页侧滑列表的show hide由于多个地方可以控制，我将方法写在了util里一一绑定了事件。当这样的情况变多时就会越发难以控制。</li>
-<li>所用到的图片，参考<a href="http://tangrui.win/2016/01/09/%E7%BC%96%E5%86%99%E4%B8%80%E4%B8%AA%E8%BD%BB%E7%9F%A5%E4%B9%8E%E6%97%A5%E6%8A%A5/#more" target="_blank" rel="external">链接</a>。</li>
-</ul>
-<h2 id="Components"><a href="#Components" class="headerlink" title="Components"></a>Components</h2><p>项目功能趋于展示，全局只写了一个events…大部分参数分析接口数据后用props传下去就可以了。</p>
-<p>简单介绍下组件们</p>
-<ul>
-<li>comments-comp——-单个评论     </li>
-<li>detail-content———–内容主体</li>
-<li>detail-header————头部一号</li>
-<li>list-comp——————首页列表里的单个项</li>
-<li>list-header—————-头部二号</li>
-<li>main-default————-初始列表页，import了slider和list-comp</li>
-<li>main-theme————–主题内容主体，import了list-comp</li>
-<li>sidebar———————侧滑列表。<em>手动斜眼I，偷懒没写滑动事件。</em></li>
-<li>slider————————初始页的轮播。<em>手动斜眼II，Swiper写的。</em></li>
-</ul>
-<p>部分实现与问题：</p>
-<ul>
-<li><p>第一次以组建化思想写的完整项目，一开始就知道怼头部……      <em>(hahahh</em></p>
-</li>
-<li><p>list-comp实现了复用，其实每次有新的需求时，都是返回去稍微改改。</p>
-</li>
-<li><p>comments-comp单个评论组件里格式化时间戳，接口返回的评论时间是”time”: 1413600071的格式。</p>
-<p>这里贴下格式化时间戳的代码，当然不是我写的。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*</span></div><div class="line">  格式化时间戳</div><div class="line">  1469175239 ｜ fommatTime "yyyy-mm-dd hh-mm-ss"</div><div class="line"> */</div><div class="line"><span class="keyword">const</span> formatTimeAPI = (timeStamp, fmt) =&gt; &#123;<span class="comment">// author: meizz</span></div><div class="line">  <span class="keyword">if</span>(!timeStamp)</div><div class="line">    <span class="keyword">return</span> <span class="string">''</span></div><div class="line"></div><div class="line">  <span class="keyword">var</span> _timeStamp = <span class="built_in">parseInt</span>(timeStamp)</div><div class="line">  <span class="keyword">if</span>(_timeStamp.toString().length === <span class="number">10</span>)</div><div class="line">    _timeStamp *= <span class="number">1000</span></div><div class="line"></div><div class="line">  !fmt &amp;&amp; (fmt = <span class="string">'yyyy-mm-dd'</span>)</div><div class="line"></div><div class="line">  <span class="keyword">var</span> t = <span class="keyword">new</span> <span class="built_in">Date</span>(_timeStamp)</div><div class="line"></div><div class="line">  <span class="keyword">var</span> o = &#123;</div><div class="line">    <span class="string">'M+'</span>: t.getMonth() + <span class="number">1</span>,</div><div class="line">    <span class="string">'d+'</span>: t.getDate(),</div><div class="line">    <span class="string">'h+'</span>: t.getHours(),</div><div class="line">    <span class="string">'m+'</span>: t.getMinutes(),</div><div class="line">    <span class="string">'s+'</span>: t.getSeconds(),</div><div class="line">    <span class="string">'q+'</span>: <span class="built_in">Math</span>.floor((t.getMonth() + <span class="number">3</span>)/ <span class="number">3</span>),</div><div class="line">    <span class="string">'S'</span>: t.getMilliseconds()</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">if</span>(<span class="regexp">/(y+)/</span>.test(fmt))</div><div class="line">    fmt = fmt.replace(<span class="built_in">RegExp</span>.$<span class="number">1</span>, (t.getFullYear() + <span class="string">''</span>).substr(<span class="number">4</span> - <span class="built_in">RegExp</span>.$<span class="number">1.</span>length))</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> k <span class="keyword">in</span> o) &#123;</div><div class="line">      <span class="keyword">if</span> (<span class="keyword">new</span> <span class="built_in">RegExp</span>(<span class="string">'('</span> + k + <span class="string">')'</span>).test(fmt))</div><div class="line">        fmt = fmt.replace(<span class="built_in">RegExp</span>.$<span class="number">1</span>, (<span class="built_in">RegExp</span>.$<span class="number">1.</span>length ===<span class="number">1</span>)? (o[k]) : ((<span class="string">'00'</span> + 				  o[k]).substr((<span class="string">''</span>+o[k]).length)))</div><div class="line">    &#125;</div><div class="line">  <span class="keyword">return</span> fmt</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="Finally"><a href="#Finally" class="headerlink" title="Finally"></a>Finally</h2><p>感谢喻导，接触前端一年了都是一个人在闷头苦学，走了不不知道多少弯路。后来认识喻导，几次交流都一直鼓励我动手去做，东西先用起来。现在我越来越自信了，前端之路也会走的更加坚定。最后祝愿你的教育事业能一帆风顺。</p>
-<p>感谢yatessss，项目里给了我不小的帮助。超nice的前辈。</p>
-<p>最后要来一剂安利，Vue非常容易上手，文档好读，外加Vue-cli，vue-devtools。你不想来一套吗。</p>
 
 
                 <hr>
@@ -260,11 +303,11 @@
                 </style>
                 <div class="ds-share"
                     style="text-align: right"
-                    data-thread-key="2016/07/24/vue+vue-router实现的知乎日报/"
-                    data-title="项目总结——Vue+Vue-Router实现知乎日报"
-                    data-url="https://lany44.github.io/2016/07/24/vue+vue-router实现的知乎日报/"
-                    data-images=""
-                    data-content="Preface大约一周前喻导从掘金vue版块看到一个vue实现知乎日报的项目，然后顺手又一次向... | lany44的笔记 " >
+                    data-thread-key="2016/08/23/项目总结——React完成IFE最终任务/"
+                    data-title="项目总结——React完成IFE最终任务"
+                    data-url="https://lany44.github.io/2016/08/23/项目总结——React完成IFE最终任务/"
+                    data-images="https://lany44.github.io/2016/08/23/项目总结——React完成IFE最终任务/header-img1.jpg"
+                    data-content="前言3月份的时候拉着寝室长还有室友－隐形君X组了个团去参加百度ife前端学院，一边充电，一边努... | lany44的笔记 " >
                     <div class="ds-share-inline">
                       <ul  class="ds-share-icons-16">
                         <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
@@ -282,10 +325,10 @@
 
                 <ul class="pager">
                     
-                        <li class="previous">
-                            <a href="/2016/07/31/跨域问题总结/" data-toggle="tooltip" data-placement="top" title="跨域请求问题总结">&larr; Previous Post</a>
-                        </li>
                     
+                        <li class="next">
+                            <a href="/2016/08/05/面向对象or行为委托/" data-toggle="tooltip" data-placement="top" title="面向对象or行为委托">Next Post &rarr;</a>
+                        </li>
                     
                 </ul>
 
@@ -293,9 +336,9 @@
                 <!-- 多说评论框 start -->
                 <div class="comment">
                     <div class="ds-thread"
-                        data-thread-key="2016/07/24/vue+vue-router实现的知乎日报/"
-                        data-title="项目总结——Vue+Vue-Router实现知乎日报"
-                        data-url="https://lany44.github.io/2016/07/24/vue+vue-router实现的知乎日报/" >
+                        data-thread-key="2016/08/23/项目总结——React完成IFE最终任务/"
+                        data-title="项目总结——React完成IFE最终任务"
+                        data-url="https://lany44.github.io/2016/08/23/项目总结——React完成IFE最终任务/" >
                     </div>
                 </div>
                 <!-- 多说评论框 end -->
@@ -335,7 +378,7 @@
                     <h5><a href="/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
                        
-                          <a class="tag" href="/tags/#Vue" title="Vue">Vue</a>
+                          <a class="tag" href="/tags/#React" title="React">React</a>
                         
                     </div>
                 </section>
