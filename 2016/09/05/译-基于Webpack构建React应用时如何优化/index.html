@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="lany44的博客">
+    <meta name="keyword"  content="lany44">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          [译]基于Webpack构建React应用时如何优化 - lany44的笔记
+        
+    </title>
+
+    <link rel="canonical" href="https://lany44.github.io/2016/09/05/译-基于Webpack构建React应用时如何优化/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="http://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">lany44的笔记</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">about</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="https://lany44.github.io/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('header-bendanfq.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#Webpack" title="Webpack">Webpack</a>
+                        
+                    </div>
+                    <h1>[译]基于Webpack构建React应用时如何优化</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by lany44 on
+                        2016-09-05
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <center><img src="./compiling.png" alt=""></center>
+
+<p>如果你的项目因为依赖了很多类库而导致Webpack编译过慢，不要担心，Webpack的<code>DLLPlugin</code>可以解决你的烦恼，它会把你的所有的库放到一个单独的文件中。这个公共库文件最终会在Webpack主配置文件中被引用。一个典型的React app可能包含几十个类库，包括你喜欢的Flux的实现例如redux，router，add-ons和一些工具库等等。Webpack会跳过那些<code>DLL</code>中包含的库从而节省我们宝贵的编译时间。</p>
+<p>本篇文章假设您已经熟练基于Webpack构建React应用，如果你还没有入门，请先移步<a href="http://survivejs.com/webpack_react/webpack/" target="_blank" rel="external"> SurviveJS的教程</a>。</p>
+<h2 id="第一步：列举你的依赖库们"><a href="#第一步：列举你的依赖库们" class="headerlink" title="第一步：列举你的依赖库们"></a>第一步：列举你的依赖库们</h2><p>创建和维护一个<code>DLL</code>最简单的方法就是搞一个JS文件放进你的项目里，我们称之为 <code>vendors.js</code>同时把require的库放进去。举个栗子，在最近手头的项目里，我们的 <code>vendors.js</code> 大概是这样的：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">require</span>(<span class="string">"classnames"</span>);</div><div class="line"><span class="built_in">require</span>(<span class="string">"dom-css"</span>);</div><div class="line"><span class="built_in">require</span>(<span class="string">"lodash"</span>);</div><div class="line"><span class="built_in">require</span>(<span class="string">"react"</span>);</div><div class="line"><span class="built_in">require</span>(<span class="string">"react-addons-update"</span>);</div><div class="line"><span class="built_in">require</span>(<span class="string">"react-addons-pure-render-mixin"</span>);</div><div class="line"><span class="built_in">require</span>(<span class="string">"react-dom"</span>);</div><div class="line"><span class="built_in">require</span>(<span class="string">"react-redux"</span>);</div><div class="line"><span class="built_in">require</span>(<span class="string">"react-router"</span>);</div><div class="line"><span class="built_in">require</span>(<span class="string">"redux"</span>);</div><div class="line"><span class="built_in">require</span>(<span class="string">"redux-saga"</span>);</div><div class="line"><span class="built_in">require</span>(<span class="string">"redux-simple-router"</span>);</div><div class="line"><span class="built_in">require</span>(<span class="string">"redux-storage"</span>);</div><div class="line"><span class="built_in">require</span>(<span class="string">"redux-undo"</span>);</div></pre></td></tr></table></figure>
+<p>这些库将被编译到<code>DLL</code>中，然后成为一个公公库文件。</p>
+<blockquote>
+<p>注：你也可以使用Babel+ES6的import来搞。</p>
+</blockquote>
+<h2 id="第二步：生成DLL"><a href="#第二步：生成DLL" class="headerlink" title="第二步：生成DLL"></a>第二步：生成DLL</h2><p>现在我们可以写一个Webpack配置文件来生成这个<code>DLL</code>－公共库文件了。这个配置文件并不是Webpack的主配置文件，它们是相互独立的。这个只为生成个<code>DLL</code>。</p>
+<p>我们就叫他<code>webpack.dll.js</code>吧：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> path = <span class="built_in">require</span>(<span class="string">"path"</span>);</div><div class="line"><span class="keyword">var</span> webpack = <span class="built_in">require</span>(<span class="string">"webpack"</span>);</div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">    entry: &#123;</div><div class="line">        vendor: [path.join(__dirname, <span class="string">"client"</span>, <span class="string">"vendors.js"</span>)]</div><div class="line">    &#125;,</div><div class="line">    output: &#123;</div><div class="line">        path: path.join(__dirname, <span class="string">"dist"</span>, <span class="string">"dll"</span>),</div><div class="line">        filename: <span class="string">"dll.[name].js"</span>,</div><div class="line">        library: <span class="string">"[name]"</span></div><div class="line">    &#125;,</div><div class="line">    plugins: [</div><div class="line">        <span class="keyword">new</span> webpack.DllPlugin(&#123;</div><div class="line">            path: path.join(__dirname, <span class="string">"dll"</span>, <span class="string">"[name]-manifest.json"</span>),</div><div class="line">            name: <span class="string">"[name]"</span>,</div><div class="line">            context: path.resolve(__dirname, <span class="string">"client"</span>)</div><div class="line">        &#125;),</div><div class="line">        <span class="keyword">new</span> webpack.optimize.OccurenceOrderPlugin(),</div><div class="line">        <span class="keyword">new</span> webpack.optimize.UglifyJsPlugin()</div><div class="line">    ],</div><div class="line">    resolve: &#123;</div><div class="line">        root: path.resolve(__dirname, <span class="string">"client"</span>),</div><div class="line">        modulesDirectories: [<span class="string">"node_modules"</span>]</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>这个很像一个典型的Webpack配置文件，除了这个包含<code>manifest path</code>，<code>name</code>，<code>context</code>的<code>webpack.DLLPlugin</code>。<code>manifest path</code>非常重要，它会为项目主配置文件中引用时提供各模块的映射关系。NOW，试着在命令行webpack –config=webpack.dll.js，之后你会得到一个<code>dll\vendor-manifest.json</code>和一个 <code>dist\dll\dll.vendor.js</code> 。</p>
+<h2 id="第三部：构建你的项目"><a href="#第三部：构建你的项目" class="headerlink" title="第三部：构建你的项目"></a>第三部：构建你的项目</h2><blockquote>
+<p>注：下面这个例子没有包含Sass，assets，hotloader等等。你可以自行添加。</p>
+</blockquote>
+<p>现在，我们需要在 <code>webpack.dev.js</code> 添加 <code>DLLReferencePlugin</code> 同时导入已生成的<code>DLL</code>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> path = <span class="built_in">require</span>(<span class="string">"path"</span>);</div><div class="line"><span class="keyword">var</span> webpack = <span class="built_in">require</span>(<span class="string">"webpack"</span>);</div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">    cache: <span class="literal">true</span>,</div><div class="line">    devtool: <span class="string">"eval"</span>, <span class="comment">//or cheap-module-eval-source-map</span></div><div class="line">    entry: &#123;</div><div class="line">        app: path.join(__dirname, <span class="string">"client"</span>, <span class="string">"index.js"</span>)</div><div class="line">    &#125;,</div><div class="line">    output: &#123;</div><div class="line">        path: path.join(__dirname, <span class="string">"dist"</span>),</div><div class="line">        filename: <span class="string">"[name].js"</span>,</div><div class="line">        chunkFilename: <span class="string">"[name].js"</span></div><div class="line">    &#125;,</div><div class="line">    plugins: [</div><div class="line">        <span class="comment">//Typically you'd have plenty of other plugins here as well</span></div><div class="line">        <span class="keyword">new</span> webpack.DllReferencePlugin(&#123;</div><div class="line">            context: path.join(__dirname, <span class="string">"client"</span>),</div><div class="line">            manifest: <span class="built_in">require</span>(<span class="string">"./dll/vendor-manifest.json"</span>)</div><div class="line">        &#125;),</div><div class="line">    ],</div><div class="line">    <span class="built_in">module</span>: &#123;</div><div class="line">        loaders: [</div><div class="line">            &#123;</div><div class="line">                test: <span class="regexp">/\.jsx?$/</span>,</div><div class="line">                loader: <span class="string">"babel"</span>,</div><div class="line">                include: [</div><div class="line">                    path.join(__dirname, <span class="string">"client"</span>) <span class="comment">//important for performance!</span></div><div class="line">                ],</div><div class="line">                query: &#123;</div><div class="line">                    cacheDirectory: <span class="literal">true</span>, <span class="comment">//important for performance</span></div><div class="line">                    plugins: [<span class="string">"transform-regenerator"</span>],</div><div class="line">                    presets: [<span class="string">"react"</span>, <span class="string">"es2015"</span>, <span class="string">"stage-0"</span>]</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        ]</div><div class="line">    &#125;,</div><div class="line">    resolve: &#123;</div><div class="line">        extensions: [<span class="string">""</span>, <span class="string">".js"</span>, <span class="string">".jsx"</span>],</div><div class="line">        root: path.resolve(__dirname, <span class="string">"client"</span>),</div><div class="line">        modulesDirectories: [<span class="string">"node_modules"</span>]</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>这里我们还做了一些其它的事情进一步优化：</p>
+<ul>
+<li>确保 <code>cache: true</code></li>
+<li>确保babel loader配置中有 <code>cacheDirectory: true</code> </li>
+<li>在 babel loader 添加<code>include</code> (you should do this for all loaders)</li>
+<li>Set devtool to <code>eval</code> because we’re optimizing for build time <code>#nobugs</code></li>
+</ul>
+<h2 id="第四步：引入DLL"><a href="#第四步：引入DLL" class="headerlink" title="第四步：引入DLL"></a>第四步：引入DLL</h2><blockquote>
+<p>At this point, you’ve generated a vendor DLL file and you’ve got a Webpack build going to generate your app.js file. You need to serve and include both files in your template, but the DLL should come first. You’ve likely already got a template set up using the<code>HtmlWebpackPlugin</code>. Since we don’t care about hot reloading a DLL, you don’t really need to do anything special except including a<code>` before your main app.js. If you’re using</code>webpack-middleware` or your own custom server, you’ll also need to make sure that DLL is being served. At this point, everything should be running as it was, but incremental builds with Webpack should be blazing fast.</p>
+</blockquote>
+<p>在这个阶段，你已经编译出了一个DLL.js和一个app.js你需要在HTML中引入它们，并且DLL放在前面。</p>
+<h2 id="第五步：NPM-BUILD-SCRIPTS"><a href="#第五步：NPM-BUILD-SCRIPTS" class="headerlink" title="第五步：NPM BUILD SCRIPTS"></a>第五步：NPM BUILD SCRIPTS</h2><p>修改你package.json中的<code>script</code>字段简化我们的命令。</p>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="string">"scripts"</span>: &#123;</div><div class="line">    <span class="string">"clean"</span>: <span class="string">"rimraf dist"</span>,</div><div class="line">    <span class="string">"build:webpack"</span>: <span class="string">"webpack --config config.prod.js"</span>,</div><div class="line">    <span class="string">"build:dll"</span>: <span class="string">"webpack --config config.dll.js"</span>,</div><div class="line">    <span class="string">"build"</span>: <span class="string">"npm run clean &amp;&amp; npm run build:dll &amp;&amp; npm run build:webpack"</span>,</div><div class="line">    <span class="string">"watch"</span>: <span class="string">"npm run build:dll &amp;&amp; webpack --config config.dev.js --watch --progress"</span></div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>以上！</p>
+<h2 id="最后是碎碎念"><a href="#最后是碎碎念" class="headerlink" title="最后是碎碎念"></a>最后是碎碎念</h2><p>暑假写IFE终极任务时参照TJ大神的模版构件自己的项目时实在太慢，寻求解决方案时看到这篇介绍Webpack<code>DLLPlugin</code> 的文章。其实<strong>动态链接库（dll）</strong>也不是什么黑科技，这在 windows 系统下面是一种很常见的思想。<strong>一个dll包，就是一个很纯净的依赖库，它本身不能运行，是用来给你的 app 或者业务代码引用的。</strong></p>
+<p>它着实解决了我的问题。项目总结时决定翻译<a href="http://engineering.invisionapp.com/post/optimizing-webpack/" target="_blank" rel="external">这篇文章</a>，算是把坑填了同时也体验了下翻译感觉。/w\</p>
+<p>自己实际项目中写的和这个有点出入，有兴趣可以去我前一篇文章看代码。</p>
+
+
+                <hr>
+
+                
+                <!-- 多说 Share start -->
+                </style>
+                <div class="ds-share"
+                    style="text-align: right"
+                    data-thread-key="2016/09/05/译-基于Webpack构建React应用时如何优化/"
+                    data-title="[译]基于Webpack构建React应用时如何优化"
+                    data-url="https://lany44.github.io/2016/09/05/译-基于Webpack构建React应用时如何优化/"
+                    data-images="https://lany44.github.io/2016/09/05/译-基于Webpack构建React应用时如何优化/header-bendanfq.jpg"
+                    data-content="
+
+如果你的项目因为依赖了很多类库而导致Webpack编译过慢，不要担心，Webpack的DL... | lany44的笔记 " >
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat flat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo flat" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban flat" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- 多说 Share end-->
+                
+
+                <ul class="pager">
+                    
+                    
+                        <li class="next">
+                            <a href="/2016/08/23/项目总结——React完成IFE最终任务/" data-toggle="tooltip" data-placement="top" title="项目总结——React完成IFE最终任务">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread"
+                        data-thread-key="2016/09/05/译-基于Webpack构建React应用时如何优化/"
+                        data-title="[译]基于Webpack构建React应用时如何优化"
+                        data-url="https://lany44.github.io/2016/09/05/译-基于Webpack构建React应用时如何优化/" >
+                    </div>
+                </div>
+                <!-- 多说评论框 end -->
+                
+
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+            <div class="
+                col-lg-2 col-lg-offset-0
+                visible-lg-block
+                sidebar-container
+                catalog-container" style="position: fixed; right: 0px; top: 10%; visibility:hidden">
+                <div class="side-catalog">
+                    <hr class="hidden-sm hidden-xs">
+                    <h5>
+                        <a class="catalog-toggle" href="#">目录</a>
+                    </h5>
+                    <ul class="catalog-body"></ul>
+                </div>
+            </div>
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#Webpack" title="Webpack">Webpack</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+<script>
+  window.onload = function() {
+    if(document.querySelector('.catalog-container'))
+    window.addEventListener('scroll', showCatalog, false)
+  }
+  function showCatalog() {
+    var catelog = document.querySelector('.catalog-container')
+    if(document.body.scrollTop > 600) {
+      catelog.style.visibility = 'visible'
+    } else {
+      catelog.style.visibility = 'hidden'
+    }
+  }
+</script>
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    // dynamic User by Hux
+    var _user = 'lany44';
+
+    // duoshuo comment query.
+    var duoshuoQuery = {short_name: _user };
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/lany44">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/lany44">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/lany44">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    &copy; 2016
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span>
+                    <a href="http://weibo.com/lany44">lany44</a>
+                    <br text-muted>
+                    Generated by <a href="https://hexo.io/">Hexo</a>
+                    theme<a href="https://github.com/huxpro/huxpro.github.io/"> Hux</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!--
+     Because of the native support for backtick-style fenced code blocks
+     right within the Markdown is landed in Github Pages,
+     From V1.6, There is no need for Highlight.js,
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://lany44.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("http://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = '74492af5430b0958dfb2be4fc2621c36';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+<!-- Side Catalog -->
+
+<script type="text/javascript">
+    function generateCatalog (selector) {
+        var P = $('div.post-container'),a,n,t,l,i,c;
+        a = P.find('h1,h2,h3,h4,h5,h6');
+        a.each(function () {
+            n = $(this).prop('tagName').toLowerCase();
+            i = "#"+$(this).prop('id');
+            t = $(this).text();
+            c = $('<a href="'+i+'" rel="nofollow">'+t+'</a>');
+            l = $('<li class="'+n+'_nav"></li>').append(c);
+            $(selector).append(l);
+        });
+        return true;
+    }
+
+    generateCatalog(".catalog-body");
+
+    // toggle side catalog
+    $(".catalog-toggle").click((function(e){
+        e.preventDefault();
+        $('.side-catalog').toggleClass("fold")
+    }))
+
+    /*
+     * Doc: https://github.com/davist11/jQuery-One-Page-Nav
+     * Fork by Hux to support padding
+     */
+    async("/js/jquery.nav.js", function () {
+        $('.catalog-body').onePageNav({
+            currentClass: "active",
+            changeHash: !1,
+            easing: "swing",
+            filter: "",
+            scrollSpeed: 700,
+            scrollOffset: 0,
+            scrollThreshold: .2,
+            begin: null,
+            end: null,
+            scrollChange: null,
+            padding: 80
+        });
+    });
+</script>
+
+
+
+
+<!-- Image to hack wechat -->
+<!--img src="https://lany44.github.io/img/icon_wechat.png" width="0" height="0" /-->
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

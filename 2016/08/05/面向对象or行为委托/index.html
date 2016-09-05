@@ -239,7 +239,7 @@
 <p>在行为委托模式中，LoginController和AuthController都是对象。它们是兄弟关系。栗子中AuthController委托了LoginController，反过来委托也是可以的。</p>
 <p>我们没有在2个对象中定义相同的方法名success(…)，failure(…)，相反的我们定义了更具描述性的方法名accepted(…)、rejected(…)。这正是委托思想中提倡的。同时还提倡尽量避免使用显式伪多态调用（ xxx.prototype.x.call() ）,代之以this.xxx()。</p>
 <p>最重要的是我们避免了面向对象中的多态。因为我们没有在不同的对象中使用相同的函数名success(…)和failure(…)。所以不需要使用显式伪多态。</p>
-<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>这两天读<strong>You Don’t Know JS</strong>入迷了，特别是最后面向对象和行为委托这两章特别来电。作者对JS有独到的理解，中文翻译也超好，绝对是一本必读。自己也试着去看了github上的原版，真的羡慕能流畅阅读的强者们。(￣ー￣〃)</p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>这两天读<strong>You Don’t Know JS</strong>入迷了，特别是最后面向对象和行为委托这两章特别来电。作者对JS有独到的理解，中文翻译也超好，绝对是一本必读。自己也试着去看了github上的原版，真的羡慕能流畅阅读的同学。(￣ー￣〃)</p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><blockquote>
 <p>[1] Kyle Simpson. <strong>You Don’t Know JS: this &amp; Object Prototype</strong>[M]. 赵望野 译.</p>
 <p>[2] Nicholas C.Zakas. <strong>Professional JavaScript for Web Developers</strong>[M]. 3rd Edition. 李松峰，曹力 译.</p>
