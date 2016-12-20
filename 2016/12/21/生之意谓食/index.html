@@ -13,11 +13,11 @@
 
     <title>
         
-          项目总结——React完成IFE最终任务 - lany44的笔记
+          生之意谓食 - lany44的笔记
         
     </title>
 
-    <link rel="canonical" href="https://lany44.github.io/2016/08/23/项目总结——React完成IFE最终任务/">
+    <link rel="canonical" href="https://lany44.github.io/2016/12/21/生之意谓食/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -155,7 +155,7 @@
 <!-- Post Header -->
 <style type="text/css">
     header.intro-header{
-        background-image: url('header-img1.jpg')
+        background-image: url('/img/header-img.jpg')
     }
 </style>
 <header class="intro-header" >
@@ -165,14 +165,14 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                          <a class="tag" href="/tags/#React" title="React">React</a>
+                          <a class="tag" href="/tags/#life" title="life">life</a>
                         
                     </div>
-                    <h1>项目总结——React完成IFE最终任务</h1>
+                    <h1>生之意谓食</h1>
                     <h2 class="subheading"></h2>
                     <span class="meta">
                         Posted by lany44 on
-                        2016-08-23
+                        2016-12-21
                     </span>
                 </div>
             </div>
@@ -191,105 +191,19 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>3月份的时候拉着寝室长还有室友－隐形君X组了个团去参加百度ife前端学院，一边充电，一边努力完成任务。一路上由于大家水平相差太多，所以各自为战。结束时自己虽然只完成到第三阶段，但也坚定了前端这条道路，这里先由衷的感谢下百度EFE团队。<br>IFE结束了，但那最终任务却在脑海里一直挥之不去，终于自己在暑假废了些心思把她拿下了。/w\</p>
-<p><a href="http://ife.baidu.com/task/detail?taskId=50" target="_blank" rel="external">任务要求</a><br><a href="https://github.com/lany44/2016_ife_4-1" target="_blank" rel="external">源码</a>     <a href="http://lany44.com/2016_ife_4-1/build/" target="_blank" rel="external">在线demo</a></p>
-<p>写了两周，参考第一名颜适的设计和部分实现。同样使用React将任务做成了SPA。还有很多可以优化的地方，但自己懒癌发作，打算就此搁置。</p>
-<h2 id="技术体系"><a href="#技术体系" class="headerlink" title="技术体系"></a>技术体系</h2><ul>
-<li>JavaScript: <a href="http://facebook.github.io/react/" target="_blank" rel="external">React</a> + <a href="http://redux.js.org/" target="_blank" rel="external">Redux</a> + <a href="https://github.com/reactjs/react-router" target="_blank" rel="external">React-Router</a></li>
-<li>CSS: <a href="https://github.com/css-modules/css-modules" target="_blank" rel="external">CSS-Modules</a> + <a href="http://sass-lang.com/" target="_blank" rel="external">Sass</a> + <a href="http://postcss.org/" target="_blank" rel="external">PostCSS</a></li>
-<li>Graph: <a href="http://recharts.org/" target="_blank" rel="external">Recharts</a></li>
-<li>Build: <a href="https://www.npmjs.com/" target="_blank" rel="external">NPM</a> + <a href="https://babeljs.io/" target="_blank" rel="external">Babel</a> + <a href="https://webpack.github.io/" target="_blank" rel="external">Webpack</a></li>
-</ul>
-<p>js方面拥抱ES6，且采用了React技术栈，用Redux维护分发state，用React-Router做页内跳转。<br>css使用Sass＋PostCSS做buff，用CSS-Modules解决模块化。<br>可视化参考第一名简单使用了Recharts。</p>
-<p>不了解React的同学还是先去读文档吧</p>
-<h2 id="State"><a href="#State" class="headerlink" title="State"></a>State</h2><p>这里介绍下Redux维护的State<br>大体上用editing中间态做缓冲，提交时推入list并存于localStorage。</p>
-<ul>
-<li>questionnaires包含了问卷系统的主要信息。<ul>
-<li>list是记录每张问卷信息的数组，存于localStorage。<ul>
-<li>title为问卷标题。</li>
-<li>deadline为问卷截止时间。</li>
-<li>status为问卷当前状态。</li>
-<li>questions是记录每个问题信息的数组。<ul>
-<li>type为问题类型。</li>
-<li>content为选择题的标题，或者文本题的问题内容。</li>
-<li>若为选择题，则有options记录每个选项的内容。</li>
-<li>若为文本题，则有isRequired记录该题是否必填。</li>
-</ul>
-</li>
-<li>data为记录当前问卷所有数据的二维数组，第一维表示问卷填写数据的序号，第二维表示问题的序号。</li>
-</ul>
-</li>
-<li>editing记录了编辑时的中间状态。<ul>
-<li>id为当前编辑问卷的序号。</li>
-<li>question标记title，可编辑时title作为－1个问题。</li>
-<li>title为当前编辑问卷的标题。</li>
-<li>deadline为当前编辑问卷的截止时间。</li>
-<li>questions是记录当前编辑问卷的问题信息的数组，结构同上。</li>
-<li>data记录填写中的问卷的数据，结构同上。</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>dialog, calendar略。</li>
-</ul>
-<h2 id="Containers"><a href="#Containers" class="headerlink" title="Containers"></a>Containers</h2><p>App包含以下页面</p>
-<ul>
-<li><p>Home（首页）</p>
-</li>
-<li><p>Edit（编辑问卷页）</p>
-</li>
-<li><p>Fill（填写问卷页）</p>
-</li>
-<li><p>Check（查看数据页）</p>
-</li>
-</ul>
-<h2 id="CSS-amp-CSS-Modules"><a href="#CSS-amp-CSS-Modules" class="headerlink" title="CSS &amp; CSS Modules"></a>CSS &amp; CSS Modules</h2><p>App用了很多CSS3特性，包括</p>
-<ul>
-<li>flex</li>
-<li>calc</li>
-<li>transform</li>
-<li>animation</li>
-<li>linear-gradient</li>
-<li>box-shadow</li>
-<li>text-shadow</li>
-</ul>
-<p>使用 JS 来管理样式依赖。CSS Modules你的CSS模块化解决方案。/w\<br>写起来就跟vue的单文件模版一样爽快，详细可以看这篇<a href="https://zhuanlan.zhihu.com/p/20495964" target="_blank" rel="external">文章</a>。</p>
-<h2 id="Components"><a href="#Components" class="headerlink" title="Components"></a>Components</h2><p>简单介绍下自己写的组件。</p>
-<ul>
-<li><p><strong>Table，Column，SortTableTh</strong> — 表格三剑客</p>
-<p><strong>安  利</strong>  下面这篇文章  ↓ ↓ ↓  </p>
-<p>详细请看<a href="https://zhuanlan.zhihu.com/p/20848369?refer=purerender" target="_blank" rel="external">React 实现 Table 的思考</a>，相当有深度 。【强～/w\</p>
-</li>
-<li><p><strong>Dialog</strong></p>
-<p>Dialog逻辑并不复杂，props接收一个dialog对象包括弹窗的必要信息{ title, info, onConfirm, onCancel }其中2个回调函数为可选参数。由于dialog内容是可变的，所以交给了reducer维护，但每次dialog发生变化时候会更新页内所有Dialog的props。虽然只会有必要那只会显示。。。非常的蠢TAT。</p>
-</li>
-<li><p><strong>EditBox</strong></p>
-<p>EditBox接收保存输入的Action－saveText，并且依靠question，option两个props来标记自己位置。</p>
-<p>每个EditBox各自维护着自己当前的显示状态，输入还是展示。</p>
-<p>主要是复用的很舒服，所以贴了出来。【组件化滴好啊/w\</p>
-</li>
-<li><p><strong>Calendar</strong></p>
-<p>日历的是耗时最久的地方，最终还是参考了手边微博送的RN的书上的日历逻辑，比较巧妙。</p>
-<p>摘了段代码，有兴趣的跟着走一遍吧。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">renderByDay() &#123;</div><div class="line">  <span class="keyword">const</span> &#123; startTime, selectedDay &#125; = <span class="keyword">this</span>.props.calendar<span class="comment">//startTime是渲染月份的一天</span></div><div class="line">  <span class="keyword">var</span> dateNow = <span class="keyword">new</span> <span class="built_in">Date</span>()</div><div class="line">  <span class="keyword">var</span> endOfMonth = <span class="keyword">new</span> <span class="built_in">Date</span>(startTime.getFullYear(), startTime.getMonth()+<span class="number">1</span>, <span class="number">0</span>)<span class="comment">//月末那天</span></div><div class="line">  <span class="keyword">var</span> firstDaysWeek = <span class="keyword">new</span> <span class="built_in">Date</span>(startTime.getFullYear(), startTime.getMonth(), <span class="number">1</span>).getDay()<span class="comment">//1号星期几</span></div><div class="line">  firstDaysWeek = firstDaysWeek == <span class="number">0</span> ? <span class="number">7</span> : firstDaysWeek</div><div class="line">  <span class="keyword">var</span> counts = endOfMonth.getDate()<span class="comment">//天数</span></div><div class="line">  <span class="keyword">var</span> rowCounts = <span class="built_in">Math</span>.ceil((counts + firstDaysWeek - <span class="number">1</span>) / <span class="number">7</span>)<span class="comment">//行数</span></div><div class="line">  <span class="keyword">var</span> rows = []</div><div class="line">  <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>; i&lt;rowCounts; i++) &#123;<span class="comment">//渲染行</span></div><div class="line">    <span class="keyword">var</span> days = []</div><div class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> j=(i*<span class="number">7</span>)+<span class="number">1</span>; j&lt;((i+<span class="number">1</span>)*<span class="number">7</span>)+<span class="number">1</span>; j++) &#123;<span class="comment">//渲染每一天</span></div></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>其实还有地方可以抽象成Stateless Components，但我偷懒直接复制粘贴了。/w\</p>
-<h2 id="Actions-Reducers"><a href="#Actions-Reducers" class="headerlink" title="Actions + Reducers"></a>Actions + Reducers</h2><p>看懂redux后，状态转移这部分毫无难度的，纯粹就是堆砌代码。<br>用<a href="https://github.com/acdlite/redux-actions" target="_blank" rel="external">redux-actions</a>做了简化。<em>真的有简化吗。。。</em></p>
-<p>redux入门可以看<a href="https://github.com/lewis617/react-redux-tutorial" target="_blank" rel="external"><strong>react-redux-tutorial</strong></a>       (￣ー￣〃)</p>
-<h2 id="Webpack"><a href="#Webpack" class="headerlink" title="Webpack"></a>Webpack</h2><p>项目构件参考tj大神的<a href="https://github.com/tj/frontend-boilerplate" target="_blank" rel="external">frontend-boilerplate</a>构建项目后发现打包很慢。</p>
-<p>直到看到<a href="http://engineering.invisionapp.com/post/optimizing-webpack/" target="_blank" rel="external">这篇文章</a>，接下来打算翻译之。<em>Flag立起  (￣ー￣〃)</em> 下一篇就是啦，坑已填</p>
-<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><ul>
-<li><p>再次感谢百度IFE和背后的EFE团队，我已经成功安利身边不少小伙伴了。</p>
-</li>
-<li><p>然后还要感谢这次的优秀学员颜适，沿着他的步伐进步真的快，而且少走弯路。</p>
-</li>
-</ul>
-<p>犯困…想到什么再来补吧  </p>
-<h2 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h2><blockquote>
-<p>[1] xile611. <strong>React 实现 Table 的思考</strong>[CP/OL].</p>
-<p>[2] camsong. <strong>CSS Modules 详解及 React 中实践</strong>[CP/OL].</p>
-</blockquote>
+                <p>生之谓食</p>
+<p>生之谓食，纪录一些事与美食，于三人之间，在南方某个靠海的城市。</p>
+<a id="more"></a>
+<h2 id="chapter-1"><a href="#chapter-1" class="headerlink" title="chapter 1"></a>chapter 1</h2><p>我曾在书上读到这样的言论</p>
+<p>合乎标准成年人一年的营养在 1984 年可以用大约 300 美元买到，或者每天 80 美分。但是这意味着那样的伙食：卷心菜，菠菜，猪肝和面粉！（参见 乔治 · j .施蒂格勒 《生存的费用》）<br>我第一次读到的时候，惊了！<br>你可能觉得上面的食材，听起来好像还不错，甚至你今天的伙食标准也不过如此。</p>
+<p>但那不仅意味着那样的伙食，还有那被你匆忙对待的人生。</p>
+<p>就像《摩登时代》里井坂好太郎对主人公说：<br>人啊，每天都是拼命地或者。做些无聊的工作，和别人说说话，就是靠这些不值一提的事累计起来，才有了生活，有了人生，对吧？<br>但是呢，如果要把某个人的人生加以概括，这些天天雷同的日常就会被省略。<br>大事能够留存，譬如结婚、离婚、生孩子、换工作，而日常生活会被删掉。<br>因为这些都分太平常和无趣。<br>像这样概括成“某某人送走了如此这般的人生”。<br>可是，对那个人来说真正重要的，是那些概括后消失的日常琐事。<br>那些才是真正的人生。</p>
+<p>吃饭是日常 loop 的部分。<br>成为那消失的日常。</p>
+<h2 id="chapter-2"><a href="#chapter-2" class="headerlink" title="chapter 2"></a>chapter 2</h2><p>生之谓食，大有 born to win 的味道。<br>把 born to win 美食化成为 born to eat， 再来点中国风当佐料，便成就了我们的名字。（顶锅盖逃<br>作为一句文言文，之在这里作补语的。<br>谓虽有意义的解释，但我更倾向于译作为。<br>补充上意义</p>
+<p>何为生之意，生之意谓食。</p>
+<p>认真对待吃饭，是我最近培养的爱好，略别于另二人。<br>工作的原因，目前我们每周只计划一次，推送看心情。</p>
+<p>生之谓食，定于另二人之间，快刀斩乱麻。<br>所以为了让自己有参与感，在正式推送之前悄悄写了这篇文章。 /w\</p>
+<p>生命应该浪费在爱的事物上，不是吗？</p>
 
 
                 <hr>
@@ -299,11 +213,14 @@
                 </style>
                 <div class="ds-share"
                     style="text-align: right"
-                    data-thread-key="2016/08/23/项目总结——React完成IFE最终任务/"
-                    data-title="项目总结——React完成IFE最终任务"
-                    data-url="https://lany44.github.io/2016/08/23/项目总结——React完成IFE最终任务/"
-                    data-images="https://lany44.github.io/2016/08/23/项目总结——React完成IFE最终任务/header-img1.jpg"
-                    data-content="前言3月份的时候拉着寝室长还有室友－隐形君X组了个团去参加百度ife前端学院，一边充电，一边努... | lany44的笔记 " >
+                    data-thread-key="2016/12/21/生之意谓食/"
+                    data-title="生之意谓食"
+                    data-url="https://lany44.github.io/2016/12/21/生之意谓食/"
+                    data-images=""
+                    data-content="生之谓食
+生之谓食，纪录一些事与美食，于三人之间，在南方某个靠海的城市。
+
+chapter 1... | lany44的笔记 " >
                     <div class="ds-share-inline">
                       <ul  class="ds-share-icons-16">
                         <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
@@ -321,13 +238,9 @@
 
                 <ul class="pager">
                     
-                        <li class="previous">
-                            <a href="/2016/09/05/译-基于Webpack构建React应用时如何优化/" data-toggle="tooltip" data-placement="top" title="[译]基于Webpack构建React应用时如何优化">&larr; Previous Post</a>
-                        </li>
-                    
                     
                         <li class="next">
-                            <a href="/2016/08/03/高性能JavaScript读书笔记/" data-toggle="tooltip" data-placement="top" title="高性能JavaScript读书笔记">Next Post &rarr;</a>
+                            <a href="/2016/10/25/context & SCU, setState, state mgmt/" data-toggle="tooltip" data-placement="top" title="context & SCU, setState, state mgmt">Next Post &rarr;</a>
                         </li>
                     
                 </ul>
@@ -336,9 +249,9 @@
                 <!-- 多说评论框 start -->
                 <div class="comment">
                     <div class="ds-thread"
-                        data-thread-key="2016/08/23/项目总结——React完成IFE最终任务/"
-                        data-title="项目总结——React完成IFE最终任务"
-                        data-url="https://lany44.github.io/2016/08/23/项目总结——React完成IFE最终任务/" >
+                        data-thread-key="2016/12/21/生之意谓食/"
+                        data-title="生之意谓食"
+                        data-url="https://lany44.github.io/2016/12/21/生之意谓食/" >
                     </div>
                 </div>
                 <!-- 多说评论框 end -->
@@ -378,7 +291,7 @@
                     <h5><a href="/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
                        
-                          <a class="tag" href="/tags/#React" title="React">React</a>
+                          <a class="tag" href="/tags/#life" title="life">life</a>
                         
                     </div>
                 </section>
