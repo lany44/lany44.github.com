@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="lany44的博客">
+    <meta name="keyword"  content="lany44">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          一套node初试题目 - lany44的笔记
+        
+    </title>
+
+    <link rel="canonical" href="https://lany44.github.io/2016/12/29/一套node初试题目/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="http://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">lany44的笔记</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">about</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="https://lany44.github.io/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/header-img.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#node" title="node">node</a>
+                        
+                          <a class="tag" href="/tags/#后端" title="后端">后端</a>
+                        
+                    </div>
+                    <h1>一套node初试题目</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by lany44 on
+                        2016-12-29
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <p>出了套node后端初试题目</p>
+<p>虽然最后没有被采用twice (´・ω・`)</p>
+<a id="more"></a>
+<center><strong>node初试笔试题</strong></center>
+
+<h3 id="一-多选题。"><a href="#一-多选题。" class="headerlink" title="一 多选题。"></a>一 多选题。</h3><ol>
+<li><p>将数字1、2、3、4、5写在五张卡片上，任意取出3张排列成三位数，这个数是奇数的概率是</p>
+<p>A. 0.5<br>B. 0.6<br>C. 0.3<br>D. 0.2</p>
+</li>
+<li><p>暂时性重定向HTTP状态码是？</p>
+<p>A. 301<br>B. 302<br>C. 307<br>D. 309</p>
+</li>
+<li><p>下面关于Nginx说法正确的是</p>
+<p>A. 通过配置Nginx可以保存请求的真实IP<br>C. 使用Nginx可以控制请求的来源<br>B. Nginx可以解决跨域问题<br>D. Nginx可以对静态资源压缩</p>
+</li>
+<li><p>使用哪些工具是用来保证代码风格一致性</p>
+<p>A. JSLint<br>b. JSHint<br>c. ESLint<br>d. ESHint</p>
+</li>
+<li><p>选择正确的项目</p>
+<p>A. SSL是规范化的TLS协议，比TLS更加安全<br>B. Node –harmony后可以使用测试中的特性<br>C. 严格模式下this不能指向全局对象<br>D. 以上答案都不正确</p>
+</li>
+<li><p>下面有关Node说法正确的是？</p>
+<p>A. 环境变量存在全局的process对象下<br>B. Windows下使用set命令配置环境变量<br>C. Crypto是node内置的加密模块<br>D. Fs.statSync能够返回文件的类型信息</p>
+</li>
+<li><p>下面有关数据库说法正确的是</p>
+<p>A. 关系型数据层存放的形式是二叉树<br>B. 使用连接池链接数据库，使用完成后该连接会被释放掉。<br>C. Mysql数据库备份命令是mysqldump<br>D. 频繁使用字段都应该建立索引以提升数据库性能</p>
+</li>
+<li><p>以下哪些方法可以进行异步流程控制</p>
+<p>A. 多层嵌套回调<br>B. 为每一个回调写单独的函数，函数里面再回调<br>C. 使用Promise<br>D. 使用async</p>
+</li>
+<li><p>一下哪些是Node的全局对象</p>
+<p>A. Process<br>B. Buffer<br>C. Module<br>D. Console</p>
+</li>
+<li><p>以下说法正确的是</p>
+<p>A. 连个Node程序间可以通过fork进行交互<br>B. Node是单线程的，异步是通过轮训队列实现的<br>C. 为了性能可以一个CPU运行一个node实例<br>D. EventEmitter是node的核心模块。</p>
+</li>
+</ol>
+<h3 id="二-填空题"><a href="#二-填空题" class="headerlink" title="二 填空题"></a>二 填空题</h3><ol>
+<li><p>在文件/home/somebody/workspace/somemodule.js中第一行引用了一个模块：require(‘othermodule‘)<br>请问required 的查找模块的顺序(     ).</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">A. /home/somebody/workspace/node_modules/othermodule/index.js</div><div class="line">B. /home/somebody/workspace/node_modules/othermodule.js</div><div class="line">C. CORE MODULES named othermodule</div><div class="line">D. /home/somebody/node_modules/othermodule/index.js</div></pre></td></tr></table></figure>
+</li>
+<li><p>Node自定义模块加载时是同步还是异步的，(     ).</p>
+</li>
+<li>数据库事务的四个特性ACID是原子性、隔离性、(     )、(     ).</li>
+<li><p>使用 for in 循环数组中的元素会枚举原型链上的所有属性，过滤这些属性的方式是使用(     )函数<br>5.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> * <span class="title">gen</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">yield</span> <span class="number">1</span>;</div><div class="line">  <span class="keyword">yield</span> <span class="number">2</span>;</div><div class="line">  <span class="keyword">yield</span> <span class="number">3</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>gen()执行后返回一个(     )对象</p>
+</li>
+<li>Mongodb是nosql数据库，而mysql是(     )型数据库</li>
+<li>https 是在http协议的基础上增加了(     )加密协议</li>
+<li>Node连接Mysql时一般使用Mysql官方提供的(     )类库</li>
+<li>为了减少服务器压力，使用Nginx或Apache 做代理转发的技术叫做(     )</li>
+<li>DNS服务器的功能是(     )</li>
+</ol>
+<h3 id="三-判断题。"><a href="#三-判断题。" class="headerlink" title="三 判断题。"></a>三 判断题。</h3><ol>
+<li>通过Nginx转发的请求，请求IP可以通过 x-forwarded-for直接获得。</li>
+<li>Fs.watch 和 fs.watchFile都能用来监听文件变化                   </li>
+<li>Linux 下Node应用不可以开启在80端口                           </li>
+<li>Function 里arguments是一个数组对象                             </li>
+<li>gm是一个流行的处理图片的类库                                  <ol>
+<li>Stream是基于事件EventEmitter的数据管理模式                      </li>
+</ol>
+</li>
+<li>Stream可以非阻塞式处理数据提升效率                            </li>
+<li>isEnumerable用来检测某一属性是否可遍历       </li>
+<li>引入json文件时，除了读取文件内容，还可以使用require引入json文件<br>。实现同样的效果             </li>
+<li>Node架构可分为四层 核心模块（javascript实现）&gt;&gt; libuv&gt;&gt;C++绑定&gt;&gt;http<br>及其他底层                   </li>
+</ol>
+<h3 id="四-程序阅读"><a href="#四-程序阅读" class="headerlink" title="四 程序阅读"></a>四 程序阅读</h3><ol>
+<li>请问输出结果是什么？<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="number">1</span>)</div><div class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve, reject</span>) </span>&#123;</div><div class="line">  reject(<span class="literal">true</span>)</div><div class="line">  <span class="built_in">window</span>.setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line"></div><div class="line">    resolve(<span class="literal">false</span>)</div><div class="line">  &#125;, <span class="number">0</span>)</div><div class="line">&#125;).then(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="number">2</span>)</div><div class="line">&#125;, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="number">3</span>)</div><div class="line">&#125;)</div><div class="line"><span class="built_in">console</span>.log(<span class="number">4</span>)</div></pre></td></tr></table></figure>
+</li>
+</ol>
+
+
+                <hr>
+
+                
+                <!-- 多说 Share start -->
+                </style>
+                <div class="ds-share"
+                    style="text-align: right"
+                    data-thread-key="2016/12/29/一套node初试题目/"
+                    data-title="一套node初试题目"
+                    data-url="https://lany44.github.io/2016/12/29/一套node初试题目/"
+                    data-images=""
+                    data-content="出了套node后端初试题目
+虽然最后没有被采用twice (´・ω・`)
+
+node初试笔试题... | lany44的笔记 " >
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat flat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo flat" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban flat" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- 多说 Share end-->
+                
+
+                <ul class="pager">
+                    
+                    
+                        <li class="next">
+                            <a href="/2016/12/27/一套前端初试题目/" data-toggle="tooltip" data-placement="top" title="一套前端初试题目">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread"
+                        data-thread-key="2016/12/29/一套node初试题目/"
+                        data-title="一套node初试题目"
+                        data-url="https://lany44.github.io/2016/12/29/一套node初试题目/" >
+                    </div>
+                </div>
+                <!-- 多说评论框 end -->
+                
+
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+            <div class="
+                col-lg-2 col-lg-offset-0
+                visible-lg-block
+                sidebar-container
+                catalog-container" style="position: fixed; right: 0px; top: 10%; visibility:hidden">
+                <div class="side-catalog">
+                    <hr class="hidden-sm hidden-xs">
+                    <h5>
+                        <a class="catalog-toggle" href="#">目录</a>
+                    </h5>
+                    <ul class="catalog-body"></ul>
+                </div>
+            </div>
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#node" title="node">node</a>
+                        
+                          <a class="tag" href="/tags/#后端" title="后端">后端</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+<script>
+  window.onload = function() {
+    if(document.querySelector('.catalog-container'))
+    window.addEventListener('scroll', showCatalog, false)
+  }
+  function showCatalog() {
+    var catelog = document.querySelector('.catalog-container')
+    if(document.body.scrollTop > 600) {
+      catelog.style.visibility = 'visible'
+    } else {
+      catelog.style.visibility = 'hidden'
+    }
+  }
+</script>
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    // dynamic User by Hux
+    var _user = 'lany44';
+
+    // duoshuo comment query.
+    var duoshuoQuery = {short_name: _user };
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/lany44">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/lany44">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/lany44">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    &copy; 2016
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span>
+                    <a href="http://weibo.com/lany44">lany44</a>
+                    <br text-muted>
+                    Generated by <a href="https://hexo.io/">Hexo</a>
+                    theme<a href="https://github.com/huxpro/huxpro.github.io/"> Hux</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!--
+     Because of the native support for backtick-style fenced code blocks
+     right within the Markdown is landed in Github Pages,
+     From V1.6, There is no need for Highlight.js,
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://lany44.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("http://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = '74492af5430b0958dfb2be4fc2621c36';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+<!-- Side Catalog -->
+
+<script type="text/javascript">
+    function generateCatalog (selector) {
+        var P = $('div.post-container'),a,n,t,l,i,c;
+        a = P.find('h1,h2,h3,h4,h5,h6');
+        a.each(function () {
+            n = $(this).prop('tagName').toLowerCase();
+            i = "#"+$(this).prop('id');
+            t = $(this).text();
+            c = $('<a href="'+i+'" rel="nofollow">'+t+'</a>');
+            l = $('<li class="'+n+'_nav"></li>').append(c);
+            $(selector).append(l);
+        });
+        return true;
+    }
+
+    generateCatalog(".catalog-body");
+
+    // toggle side catalog
+    $(".catalog-toggle").click((function(e){
+        e.preventDefault();
+        $('.side-catalog').toggleClass("fold")
+    }))
+
+    /*
+     * Doc: https://github.com/davist11/jQuery-One-Page-Nav
+     * Fork by Hux to support padding
+     */
+    async("/js/jquery.nav.js", function () {
+        $('.catalog-body').onePageNav({
+            currentClass: "active",
+            changeHash: !1,
+            easing: "swing",
+            filter: "",
+            scrollSpeed: 700,
+            scrollOffset: 0,
+            scrollThreshold: .2,
+            begin: null,
+            end: null,
+            scrollChange: null,
+            padding: 80
+        });
+    });
+</script>
+
+
+
+
+<!-- Image to hack wechat -->
+<!--img src="https://lany44.github.io/img/icon_wechat.png" width="0" height="0" /-->
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

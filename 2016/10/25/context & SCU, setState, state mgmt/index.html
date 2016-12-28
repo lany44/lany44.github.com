@@ -97,14 +97,14 @@
 
                         
                         <li>
-                            <a href="/tags/">Tags</a>
+                            <a href="/archives/">Archives</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/archives/">Archives</a>
+                            <a href="/tags/">Tags</a>
                         </li>
                         
                     
@@ -196,20 +196,20 @@
                 <p>占坑的文件已经在硬盘里躺尸几天，天知道我从有“诶，来写篇博文吧。”这个念头到真正动笔已经过了几天。。 /w\</p>
 <p>本文默认你以有一些 React 的基础，并且已经应用在实际项目中。</p>
 <a id="more"></a>
-<h2 id="context-与-SCU"><a href="#context-与-SCU" class="headerlink" title="context 与 SCU"></a>context 与 SCU</h2><p>通常我们把想要的 数据/handleMethod 通过 props 向下传递，当组件多级嵌套时这显得很繁琐， 某两个组件维护的 state 竟然要靠其他人一级级传递。。。然后我们用起了 <a href="https://facebook.github.io/react/docs/context.html" target="_blank" rel="external">context</a>，简单的 API 后是强力的效果。上层与底层组件直接连接，而且 lifecycle 和 stateless 组件中都能使用它。 可为啥我点开链接看到的却是 Why Not To Use Context？likely to break in future releases… ㄟ( ▔, ▔ )ㄏ</p>
+<h2 id="context-与-SCU"><a href="#context-与-SCU" class="headerlink" title="context 与 SCU"></a>context 与 SCU</h2><p>通常我们把想要的 数据/handleMethod 通过 props 向下传递，当组件多级嵌套时这显得很繁琐， 某两个组件维护的 state 竟然要靠其他人一级级传递。。。然后我们用起了 <a href="https://facebook.github.io/react/docs/context.html" target="_blank" rel="external">context</a>，简单的 API 后是强力的效果。上层与底层组件直接连接，而且 lifecycle 和 stateless 组件中都能使用它。 可为啥我点开链接看到的却是 Why Not To Use Context？likely to break in future releases…</p>
 <p>context 的问题关键在于，上层组件的 context 发生改变时，如果中间的某个组件的 SCU（shouldComponentUpdate）显式或者隐式的返回了 false。BOOM！下层依赖于 context 的组件不会 re-render。</p>
 <p>官方Doc context 页面底部贴了一篇博文详细的解释了这个问题 <a href="https://medium.com/@mweststrate/how-to-safely-use-react-context-b7e343eff076#.lyjnmzrqn" target="_blank" rel="external">How to safely use React context</a> 。</p>
 <p>解决思路大概有：</p>
 <ol>
-<li>别用他</li>
-<li>别改他</li>
-<li>上面博文提到的 底层组件依赖注入 然后使用 forceUpdate 强制更新  ㄟ( ▔, ▔ )ㄏ</li>
+<li>不用</li>
+<li>不改</li>
+<li>上面博文提到的 底层组件依赖注入 然后使用 forceUpdate 强制更新</li>
 </ol>
-<p>有兴趣的同学可以读读那篇文章，我也想马上试着翻译一下。<em>Flag 挂起</em>   /w\</p>
+<p>有兴趣的同学可以读读那篇文章。</p>
 <h2 id="理解-setState"><a href="#理解-setState" class="headerlink" title="理解 setState"></a>理解 setState</h2><p>this.setState() 方法应该是我们在 React 中最早熟悉的 API 之一 。更改组件的 state 引发 re-render 使组件更加灵活，大部分情况下它都能达到我们的预期效果。然而它的背后还有一些细节，关于新 set 的 state 哪些会被合并 re-render，那些又是立即 re-render 呢？</p>
 <p>先看看下面这个经典的例子。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Example</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span>() &#123;</div><div class="line">    <span class="keyword">super</span>();</div><div class="line">    <span class="keyword">this</span>.state = &#123;</div><div class="line">      val: <span class="number">0</span></div><div class="line">    &#125;;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  componentDidMount() &#123;</div><div class="line">    <span class="keyword">this</span>.setState(&#123;val: <span class="keyword">this</span>.state.val + <span class="number">1</span>&#125;);</div><div class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.state.val);    <span class="comment">// 第 1 次 log</span></div><div class="line"></div><div class="line">    <span class="keyword">this</span>.setState(&#123;val: <span class="keyword">this</span>.state.val + <span class="number">1</span>&#125;);</div><div class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.state.val);    <span class="comment">// 第 2 次 log</span></div><div class="line"></div><div class="line">    setTimeout(() =&gt; &#123;</div><div class="line">      <span class="keyword">this</span>.setState(&#123;val: <span class="keyword">this</span>.state.val + <span class="number">1</span>&#125;);</div><div class="line">      <span class="built_in">console</span>.log(<span class="keyword">this</span>.state.val);  <span class="comment">// 第 3 次 log</span></div><div class="line"></div><div class="line">      <span class="keyword">this</span>.setState(&#123;val: <span class="keyword">this</span>.state.val + <span class="number">1</span>&#125;);</div><div class="line">      <span class="built_in">console</span>.log(<span class="keyword">this</span>.state.val);  <span class="comment">// 第 4 次 log</span></div><div class="line">    &#125;, <span class="number">0</span>);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  render() &#123;</div><div class="line">    <span class="keyword">return</span> <span class="literal">null</span>;</div><div class="line">  &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<p>4 次 log 的值分别是：0、0、2、3。  ㄟ( ▔, ▔ )ㄏ</p>
+<p>4 次 log 的值分别是：0、0、2、3。</p>
 <p><img src="./setState.png" alt=""></p>
 <blockquote>
 <p>图自<a href="https://zhuanlan.zhihu.com/p/20328570?refer=purerender" target="_blank" rel="external">解密 setState - 杨森</a></p>
@@ -219,12 +219,12 @@
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * Mark a component as needing a rerender, adding an optional callback to a</div><div class="line"> * list of functions which will be executed once the rerender occurs.</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">enqueueUpdate</span>(<span class="params">component</span>) </span>&#123;</div><div class="line">  ensureInjected();</div><div class="line"></div><div class="line">  <span class="comment">// Various parts of our code (such as ReactCompositeComponent's</span></div><div class="line">  <span class="comment">// _renderValidatedComponent) assume that calls to render aren't nested;</span></div><div class="line">  <span class="comment">// verify that that's the case. (This is called by each top-level update</span></div><div class="line">  <span class="comment">// function, like setProps, setState, forceUpdate, etc.; creation and</span></div><div class="line">  <span class="comment">// destruction of top-level components is guarded in ReactMount.)</span></div><div class="line"></div><div class="line">  <span class="keyword">if</span> (!batchingStrategy.isBatchingUpdates) &#123;</div><div class="line">    batchingStrategy.batchedUpdates(enqueueUpdate, component);</div><div class="line">    <span class="keyword">return</span>;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  dirtyComponents.push(component);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>上面的代码节选自源码 <a href="https://github.com/facebook/react/blob/35962a00084382b49d1f9e3bd36612925f360e5b/src/renderers/shared/reconciler/ReactUpdates.js" target="_blank" rel="external">ReactUpdates.js</a> ， 其中的batchedUpdates 方法来自 <a href="https://github.com/facebook/react/blob/6d5fe44c8602f666a043a4117ccc3bdb29b86e78/src/renderers/shared/reconciler/ReactDefaultBatchingStrategy.js" target="_blank" rel="external">ReactDefaultBatchingStrategy.js</a> ，在 React 初始化时由 ReactDefaultInjection 注入到 ReactUpdates 中作为默认的更新策略，在所有的 liftcycle 中的 Willxxx 方法里它都会将标志位 isBatchingUpdates ＝ true，这导致了如果有再来的 state 都会被推入 dirtyComponents 数组中等待合并处理。</p>
 <p>而对于推入 dirtyComponents 中的 state，React 会按照先后顺序做类似 Object.assign 的处理然后只进行一次 render。</p>
-<p>理解 setState 背后的运行机制配合 lifecycle ，会让我们在编写代码时候思路更加清晰。是非常有必要滴。(￣ー￣〃)</p>
+<p>理解 setState 背后的运行机制配合 lifecycle ，会让我们在编写代码时候思路更加清晰。是非常有必要的。(￣ー￣〃)</p>
 <h2 id="state-mgmt"><a href="#state-mgmt" class="headerlink" title="state mgmt"></a>state mgmt</h2><p>状态管理这种东西，社区里有多的框架作解决方案，虽然他们都会带来一套 Template code ， 但 Template code 都不是事好吧，不然在复杂项目中 Model 层中一个字段发生变化触发 change 事件，你都不知道会有多少组件发生 re-render。</p>
 <p>而且严格按照框架约定的维护 state 除了扩展性好，写的时候思路也清晰的一b。</p>
 <p>还有一点，既然是按照约定的 Template code ，最好是能在项目构建的时候就约定好。：）</p>
-<h2 id="sui-sui-nian"><a href="#sui-sui-nian" class="headerlink" title="sui sui nian"></a>sui sui nian</h2><p>自己离校工作已经一个月多了，慢慢习惯了这边的节奏，工作日认真帮公司做事，休假基本在家躺尸看剧。。一下子感觉自己落后的很多，拖了很就才写了这篇博文。之后在保证工作的前提下，把买的书读了，然后关注社区接触新的东西，写更多的文zang。</p>
-<p>许了很多愿<em>（挖了很多坑）</em>，希望都可以一步一步的实现。</p>
+<h2 id="。"><a href="#。" class="headerlink" title="。"></a>。</h2><p>自己离校工作已经一个月多了，慢慢习惯了节奏，工作日认真帮公司做事，休假在家躺尸看剧。。一下子感觉落后的很多，拖了很就才写了这篇博文。之后要把买的书读了，然后关注社区接触新的东西，写更多的文字。</p>
+<p>许了很多愿<em>（挖了很多坑）</em>，希望都可以一步步实现。</p>
 
 
                 <hr>
