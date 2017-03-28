@@ -13,11 +13,11 @@
 
     <title>
         
-          react-native中使用icon-font - lany44的笔记
+          react-native中使用非标准字体 - lany44的笔记
         
     </title>
 
-    <link rel="canonical" href="https://lany44.github.io/2017/03/27/react-native中使用icon-font/">
+    <link rel="canonical" href="https://lany44.github.io/2017/03/27/react-native中使用非标准字体/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -168,7 +168,7 @@
                           <a class="tag" href="/tags/#react－native" title="react－native">react－native</a>
                         
                     </div>
-                    <h1>react-native中使用icon-font</h1>
+                    <h1>react-native中使用非标准字体</h1>
                     <h2 class="subheading"></h2>
                     <span class="meta">
                         Posted by lany44 on
@@ -193,19 +193,22 @@
 
                 <p>毕业设计选择了使用 react-native 做个玩具，使用自定义 icon 的时候，发现流行的 react-native-vector-icons（4223 star）没有支持大阿里的 iconfont。支持了 FontAwesome，MaterialCommunityIcons 等高大上的公共库，要知道他们加起来 icon 数还不到 iconfont 的二分之一。</p>
 <a id="more"></a>
-<p>后来找到前辈的解决方案，自己也去读了下 <a href="https://github.com/oblador/react-native-vector-icons/blob/master/lib/create-icon-set.js" target="_blank" rel="external">react-native-vector-icons</a> 的源码。<em>（实在健壮</em></p>
-<p>.tff (<a href="https://www.microsoft.com/en-us/Typography/WhatIsTrueType.aspx" target="_blank" rel="external">TrueType</a>) 是由苹果和微软在1991年提出的一种 digital font technology。它用数学函数描述字体轮廓外形，含有字形构造、颜色填充、数字描述函数、流程条件控制、栅格处理控制、附加提示控制等指令。世界范围内已经有非常广泛的应用。<br>在计算机字体长河中，除了技术的不断进步，还有如浏览器大战产生多个标准浏览器一样多版本字体。<br>奇葩到泡沫经济产物<a href="https://www.zhihu.com/question/22987062" target="_blank" rel="external">㌍㌫㌶㍊㍍ 机种依存文字</a>。<em>（下面的回答爆好笑</em></p>
-<p>检索后了解到 .ttf 字体文件主要有</p>
-<p>.cmap         唯一字符代码映射到字体图元的键值<br>.glyf         字体的描述轮廓，格式为二次 Bezier 曲线</p>
-<p>….. 还有包括.loca 位置索引  .hmtx 布局描述等等，十分复杂。</p>
-<p>在 web 中，我们指定 font-family 后用::伪元素 content: ‘Unicode码’ 引用过字体文件中的字体。<br>顾名思义 Unicode 码就是 .cmap 中的那个映射的编码。<br>在<a href="https://github.com/oblador/react-native-vector-icons/blob/master/glyphmaps/FontAwesome.json" target="_blank" rel="external">react-native-vector-icons</a> 仓库中我们看到了各中字体库的 glyphmaps</p>
-<p>仿照 Icon组件 render() 中的方法<br>把 String.fromCharCode(glyphmaps[name]) 放到 react-native Text 组件中就可以了。</p>
-<p>那么如何生成 glyphmaps 。<br>前辈用 python 撸了个<a href="https://github.com/bob-chen/react-native-iconfont-mapper" target="_blank" rel="external">小脚本</a><br>引用了 py 世界里 fontTools 这个库。<em>（关于字符 py 真的强大</em></p>
+<p>后来找到前辈的解决方案，自己也去学了些 字符集 -&gt; 字符集的编码方式 -&gt; 系统字体 的基础知识。终于理解了为啥代码都是用英文的了…</p>
+<p>在计算机字体长河中，除了由于字符需求的不断扩充，各国纷纷制定支持本国文字的字符标准外，还有如浏览器大战产生多个标准浏览器一样好玩的东西。比如日本泡沫经济产物<a href="https://www.zhihu.com/question/22987062" target="_blank" rel="external"> ㌍㌫㌶㍊㍍  机种依存文字</a>。<em>（下面的回答爆好笑</em> 那个时候计算机的存储器容量有限制性，所以还有了汉卡这种东西。</p>
+<p>在<a href="https://www.zhihu.com/question/23374078" target="_blank" rel="external">一段艰难的历史进程</a>后， <em>ISO</em>（国际标谁化组织）出世，决定将全世界所有的字符包含在一个集合里，计算机只要支持这一个字符集，就能显示所有的字符，也不会有乱码了。Unicode 字符集诞生。</p>
+<p>字符集 Unicode 码标识了某个字。字符集的编码方式又是百花齐放，UTF－8，－16，GBK，GB2312….<br>他们都是对 Unicode 的表达方式，且各具优势。这也是一种字体文件中有十几个 cmap 的原因。</p>
+<p>我们从阿里妈妈 iconfont 中 done 下来包中包含了 .tff .woff .eot 等字体文件。作为非标准字体，他们的 Unicode 码一般在 Unicode 码预留空间里。<br>.tff (<a href="https://www.microsoft.com/en-us/Typography/WhatIsTrueType.aspx" target="_blank" rel="external">TrueType</a>) 作为一种常见的字体文件格式，是由苹果和微软在1991年提出的一种 digital font technology。它用数学函数描述字体轮廓外形，含有字形构造、颜色填充、数字描述函数、流程条件控制、栅格处理控制、附加提示控制等指令。世界范围内已经有非常广泛的应用。</p>
+<p>一般的字体文件中主要有以下结构，.tff 也一样</p>
+<p>cmap         唯一字符代码映射到字体图元的键值 Unicode 码<br>glyf             字体的描述轮廓，格式为二次 Bezier 曲线<br>….. 还有 loca 位置索引 hmtx 布局描述 head 字体的全局信息等等，十分复杂。</p>
+<p>做页面的时，@font-face给引用字体并命名然后指定元素的 font-family ，使用 Unicode码 就能引用字体文件中的字体。<br>所以我们只要把正确的 Unicode码 放在 react-native Text 组件中就可以了。</p>
+<p>在<a href="https://github.com/oblador/react-native-vector-icons/blob/master/glyphmaps/FontAwesome.json" target="_blank" rel="external">react-native-vector-icons</a> 仓库中我们可以看到各个非标准字体库的 glyphmaps<br>在 Icon组件 render() 中的方法我们也能看到 String.fromCharCode(glyphmaps[name]) 放到 react-native Text 组件中。关于 javascript 与 Unicode 看<a href="http://www.ruanyifeng.com/blog/2014/12/unicode.html" target="_blank" rel="external">这里</a>。</p>
+<p>那么如何生成 glyphmaps 。如果你只是对着一个10k的ttf文件，那么左手右手一个慢动作，靠着五姑娘的勤劳也可以很快完成，但是如果面对的是个有700个图标的 FontAwesome 怎么办？</p>
+<p>前辈用 python 撸了个<a href="https://github.com/bob-chen/react-native-iconfont-mapper" target="_blank" rel="external">小脚本</a>，看了下归功于引用了 py 世界里 fontTools 这个库。<em>（关于字符 py 真的强大</em></p>
+<p>getcmap 的两个参数是 字体文件中 cmap 的标示信息 platformID 和 platEncID 。<em>（吐槽下 py 界 doc 难找</em><br>platformID 和 platEncID 我们使用 fontTools 把字体转成 XML 就能看到。3, 1采用的是 UCS-2 存储编码。在 windows 中默认使用</p>
 <p>接下来的事情就很简单了。</p>
-<p>iso 上，我们需要将 xx.tff 文件在 Xcode 上加入项目</p>
-<p><img src="./1.png" alt=""><br><img src="./2.png" alt=""></p>
-<p>android 的解决方案看起来很简单粗暴，没有去测试。<br>然后 react-native link 就行了 参见 <a href="https://github.com/oblador/react-native-vector-icons#option-manually" target="_blank" rel="external">这里</a></p>
-<p>熬夜时的你，离疯癫不远。</p>
+<p>ios 上，我们需要将 xx.tff 文件先在 Xcode 上加入项目<br><img src="./1.png" alt=""><br><img src="./2.png" alt=""></p>
+<p>android 的解决方案看起来粗暴简单，没有去测试。<br>然后 react-native link 就行了 参见 <a href="https://github.com/oblador/react-native-vector-icons#option-manually" target="_blank" rel="external">这里</a></p>
+<p>最后 InputMono 看起来很棒啊，准备搞起来写代码了。/w\</p>
 
 
                 <hr>
@@ -215,10 +218,10 @@
                 </style>
                 <div class="ds-share"
                     style="text-align: right"
-                    data-thread-key="2017/03/27/react-native中使用icon-font/"
-                    data-title="react-native中使用icon-font"
-                    data-url="https://lany44.github.io/2017/03/27/react-native中使用icon-font/"
-                    data-images="https://lany44.github.io/2017/03/27/react-native中使用icon-font/header-img1.jpg"
+                    data-thread-key="2017/03/27/react-native中使用非标准字体/"
+                    data-title="react-native中使用非标准字体"
+                    data-url="https://lany44.github.io/2017/03/27/react-native中使用非标准字体/"
+                    data-images="https://lany44.github.io/2017/03/27/react-native中使用非标准字体/header-img1.jpg"
                     data-content="毕业设计选择了使用 react-native 做个玩具，使用自定义 icon 的时候，发现流行... | lany44的笔记 " >
                     <div class="ds-share-inline">
                       <ul  class="ds-share-icons-16">
@@ -248,9 +251,9 @@
                 <!-- 多说评论框 start -->
                 <div class="comment">
                     <div class="ds-thread"
-                        data-thread-key="2017/03/27/react-native中使用icon-font/"
-                        data-title="react-native中使用icon-font"
-                        data-url="https://lany44.github.io/2017/03/27/react-native中使用icon-font/" >
+                        data-thread-key="2017/03/27/react-native中使用非标准字体/"
+                        data-title="react-native中使用非标准字体"
+                        data-url="https://lany44.github.io/2017/03/27/react-native中使用非标准字体/" >
                     </div>
                 </div>
                 <!-- 多说评论框 end -->
