@@ -201,13 +201,12 @@
 <p>一般的字体文件中主要有以下结构，.tff 也一样</p>
 <p>cmap         唯一字符代码映射到字体图元的键值 Unicode 码<br>glyf             字体的描述轮廓，格式为二次 Bezier 曲线<br>….. 还有 loca 位置索引 hmtx 布局描述 head 字体的全局信息等等，十分复杂。</p>
 <p>做页面的时，@font-face给引用字体并命名然后指定元素的 font-family ，使用 Unicode码 就能引用字体文件中的字体。<br>所以我们只要把正确的 Unicode码 放在 react-native Text 组件中就可以了。</p>
-<p>在<a href="https://github.com/oblador/react-native-vector-icons/blob/master/glyphmaps/FontAwesome.json" target="_blank" rel="external">react-native-vector-icons</a> 仓库中我们可以看到各个非标准字体库的 glyphmaps<br>在 Icon组件 render() 中的方法我们也能看到 String.fromCharCode(glyphmaps[name]) 放到 react-native Text 组件中。关于 javascript 与 Unicode 看<a href="http://www.ruanyifeng.com/blog/2014/12/unicode.html" target="_blank" rel="external">这里</a>。</p>
+<p>在<a href="https://github.com/oblador/react-native-vector-icons/blob/master/glyphmaps/FontAwesome.json" target="_blank" rel="external">react-native-vector-icons</a> 仓库中我们可以看到各个非标准字体库的 glyphmaps<br>在 Icon组件 render() 中的方法我们也能看到 String.fromCharCode(glyphmaps[name]) 放到 react-native Text 组件中。关于 javascript 和 Unicode 看<a href="http://www.ruanyifeng.com/blog/2014/12/unicode.html" target="_blank" rel="external">这里</a>和<a href="http://www.alloyteam.com/2016/12/javascript-has-a-unicode-sinkhole/" target="_blank" rel="external">这里</a></p>
 <p>那么如何生成 glyphmaps 。如果你只是对着一个10k的ttf文件，那么左手右手一个慢动作，靠着五姑娘的勤劳也可以很快完成，但是如果面对的是个有700个图标的 FontAwesome 怎么办？</p>
-<p>前辈用 python 撸了个<a href="https://github.com/bob-chen/react-native-iconfont-mapper" target="_blank" rel="external">小脚本</a>，看了下归功于引用了 py 世界里 fontTools 这个库。<em>（关于字符 py 真的强大</em></p>
+<p>前辈用 python 撸了个<a href="https://github.com/bob-chen/react-native-iconfont-mapper" target="_blank" rel="external">小脚本</a>，引用了 fontTools 这个专业处理字体稳健库。<em>（关于字符 py 真的强大</em></p>
 <p>getcmap 的两个参数是 字体文件中 cmap 的标示信息 platformID 和 platEncID 。<em>（吐槽下 py 界 doc 难找</em><br>platformID 和 platEncID 我们使用 fontTools 把字体转成 XML 就能看到。3, 1采用的是 UCS-2 存储编码。在 windows 中默认使用</p>
-<p>接下来的事情就很简单了。</p>
-<p>ios 上，我们需要将 xx.tff 文件先在 Xcode 上加入项目<br><img src="./1.png" alt=""><br><img src="./2.png" alt=""></p>
-<p>android 的解决方案看起来粗暴简单，没有去测试。<br>然后 react-native link 就行了 参见 <a href="https://github.com/oblador/react-native-vector-icons#option-manually" target="_blank" rel="external">这里</a></p>
+<p>react-native 已经默认内置了 rnpm, 所以 react-native link 就能同时在 ios 和 android 引入字体文件依赖</p>
+<p>或者你可以在 Xcode 上引用字体文件。<br><img src="./1.png" alt=""><br><img src="./2.png" alt=""><br>android 貌似直接放入 build 文件夹就行。 参见 <a href="https://github.com/oblador/react-native-vector-icons#option-manually" target="_blank" rel="external">这里</a></p>
 <p>最后 InputMono 看起来很棒啊，准备搞起来写代码了。/w\</p>
 
 
